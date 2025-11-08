@@ -1,0 +1,55 @@
+# Giới thiệu về Robot Learning
+
+Robot learning bắt đầu với một ý tưởng đơn giản: dạy robot cải thiện từ dữ liệu và kinh nghiệm thay vì lập trình sẵn mọi hành vi. Trong thực tế, điều đó có nghĩa là sử dụng các ví dụ (video, dữ liệu cảm biến, minh họa) và phản hồi để giúp robot thực hiện tốt hơn các tác vụ như nhặt, đặt, đẩy hoặc đi lại.
+
+Tại sao bây giờ? Hai xu hướng khiến điều này khả thi: học máy hiện đại ngày càng giỏi tìm ra các mẫu phức tạp, và các bộ dữ liệu robotics đang trở nên dễ thu thập và chia sẻ hơn. Cùng nhau, chúng cho phép ta chuyển từ phương pháp cổ điển "viết vật lý và bộ điều khiển" sang các phương pháp dựa trên học máy thích ứng từ dữ liệu.
+
+Ví dụ, một cánh tay robot có thể học cách cầm nắm khối bằng cách thử hành động và nhận phần thưởng cho tiến bộ (reinforcement learning - học tăng cường), hoặc thậm chí bằng cách quan sát và bắt chước thao tác của con người (imitation learning - học bắt chước). Theo thời gian, cùng ý tưởng này có thể mở rộng cho nhiều tác vụ và cả các dạng robot khác nhau.
+
+> [!TIP]
+> Kết thúc chương này, bạn sẽ:
+> - Hiểu đơn giản "robot learning" là gì và tại sao nó hữu ích
+> - Xem ví dụ cụ thể về học từ minh họa và thử-sai
+> - Biết chúng ta sẽ xây dựng gì trong các chương tiếp theo và LeRobot đóng vai trò gì
+
+# Một chút lịch sử
+
+Robotics giúp con người thực hiện các tác vụ lặp lại, mệt mỏi hoặc nguy hiểm. Chúng ta đã nghiên cứu thách thức này từ thập niên 1950. Gần đây, tiến bộ trong học máy mở ra cách tiếp cận mới để chế tạo robot. Thay vì yêu cầu chuyên gia viết hướng dẫn chi tiết và mô hình cho mọi tác vụ, giờ đây ta có thể sử dụng lượng lớn dữ liệu và điện toán để giúp robot tự học hành vi.
+
+> [!TIP]
+> Bối cảnh...
+>
+> Thập niên 1950 chứng kiến sự ra đời của cả trí tuệ nhân tạo (AI) và robotics như những lĩnh vực riêng biệt. Robot đầu tiên là [Unimate](https://en.wikipedia.org/wiki/Unimate), phát minh năm 1961. Phải mất gần 70 năm để các lĩnh vực này hội tụ theo cách ý nghĩa thông qua robot learning!
+
+# Tương lai của Ngành Robotics
+
+Các nhà nghiên cứu robotics hiện nay đang chuyển hướng khỏi phương pháp truyền thống là viết mô hình chi tiết và hệ thống điều khiển. Thay vào đó, họ ứng dụng học máy để tạo robot có thể:
+
+- Học kết nối trực tiếp từ những gì chúng nhìn thấy đến những gì chúng làm, mà không cần hệ thống riêng biệt cho cảm biến và điều khiển.
+- Trích xuất thông tin hữu ích từ nhiều loại cảm biến (camera, cảm biến cảm ứng, micro) bằng cách sử dụng phương pháp dựa trên dữ liệu.
+- Làm việc hiệu quả mà không cần có mô hình hoàn hảo về cách thế giới hoạt động.
+- Tận dụng số lượng ngày càng tăng của các bộ dữ liệu robotics mở cho phép bất kỳ ai cũng có thể truy cập và học từ đó.
+- Làm việc hiệu quả mà không cần có mô hình hoàn hảo về cách thế giới hoạt động.
+
+Bạn có thể xem [video này](https://www.youtube.com/watch?v=VEs1QYEgOQo) để hiểu rõ hơn về sự chuyển đổi thời gian hiện tại trong robotics.
+
+> [!WARNING]
+> **Ý tưởng chính:** Sự chuyển đổi này biểu thị sự thay đổi cơ bản về cách chúng ta nghĩ về robotics - từ việc thiết kế giải pháp chính xác đến việc học hành vi thích ứng từ dữ liệu.
+
+Xu hướng này đặc biệt quan trọng vì nó giống như cách các mô hình nền tảng như GPT và CLIP được phát triển. Các hệ thống học máy, hay còn gọi là trí tuệ nhân tạo, học để hiểu và làm việc với văn bản và hình ảnh bằng cách huấn luyện trên các tập dữ liệu lớn. Khi các tập dữ liệu robotics ngày càng lớn và robot được trang bị thêm nhiều cảm biến khác nhau (camera thông thường, camera infrared, LIDAR, micro), áp dụng các phương pháp học tương tự vào robotics trở nên càng mạnh mẽ hơn.
+
+Robotics tự nhiên yêu cầu kiến thức về cả phần mềm và phần cứng. Thêm học máy vào đó có nghĩa là các nhà nghiên cứu và ứng dụng robotics cần một tập hợp kỹ năng rộng hơn, điều này làm tăng mức độ cho cả nghiên cứu và ứng dụng thực tế.
+
+## Tham khảo
+
+Để xem danh sách đầy đủ các tham khảo, hãy xem [hướng dẫn](https://huggingface.co/spaces/lerobot/robot-learning-tutorial).
+
+- **ALVINN: An Autonomous Land Vehicle in a Neural Network** (1988)  
+  Dean A. Pomerleau  
+  Bài báo này giới thiệu một trong những demo đầu tiên về học end-to-end cho tự lái xe tự hành, trong đó một mạng nơ-ron học để ánh xạ trực tiếp các đầu vào cảm biến thành các lệnh lái.  
+  [Paper](https://proceedings.neurips.cc/paper_files/paper/1988/file/812b4ba287f5ee0bc9d43bbf5bbe87fb-Paper.pdf)
+
+- **Reinforcement Learning: An Introduction** (2018)  
+  Richard S. Sutton and Andrew G. Barto 
+  Sách giáo khoa cơ bản về học tăng cường, bao gồm các nguyên tắc cơ bản về cách robot học thông qua thử nghiệm và sai sót.
+  [Book Website](http://incompleteideas.net/book/the-book-2nd.html)

@@ -29,7 +29,7 @@ Here are different ways to set up temporal windows depending on your use case. S
 ```python
 # Simple: current observation → current action
 delta_timestamps = {
-    "observation.images.wrist_camera": [0.0],  # Just current frame
+    "observation.images.up": [0.0],  # Just current frame
     "action": [0.0]  # Just current action
 }
 
@@ -47,7 +47,7 @@ dataset = LeRobotDataset(
 ```python
 # Use observation history for context
 delta_timestamps = {
-    "observation.images.wrist_camera": [-0.2, -0.1, 0.0],  # 200ms history
+    "observation.images.up": [-0.2, -0.1, 0.0],  # 200ms history
     "action": [0.0]  # Current action
 }
 
@@ -69,7 +69,7 @@ sample = dataset[100]
 ```python
 # Predict multiple future actions at once
 delta_timestamps = {
-    "observation.images.wrist_camera": [-0.1, 0.0],  # Recent + current
+    "observation.images.up": [-0.1, 0.0],  # Recent + current
     "action": [0.0, 0.1, 0.2, 0.3]  # Current + 3 future actions
 }
 
@@ -157,7 +157,7 @@ for batch in dataloader:
     # Move to device
     observations = batch["observation.state"].to(device)
     actions = batch["action"].to(device)
-    images = batch["observation.images.wrist_camera"].to(device)
+    images = batch["observation.images.up"].to(device)
     
     # Your model training here
     # loss = model(observations, images, actions)

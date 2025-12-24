@@ -135,9 +135,6 @@ sample = streaming_dataset[100]
 
 ## Training Integration
 
-You can easily integrate regular and streaming datasets with torch data loaders. This makes integrating any LeRobotDataset with your own (`torch`) training loop rather convenient. Because we fetch all frames from the datasets as a tensor, wrapping iterating over a dataset with training is particularly straightforward.  
-
-### PyTorch DataLoader
 You can easily integrate regular and streaming datasets with torch data loaders. This makes integrating any LeRobotDataset with your own (`torch`) training loop rather convenient. Because we fetch all frames from the datasets as a tensor, wrapping iterating over a dataset with training is particularly straightforward.
 ```python
 import torch

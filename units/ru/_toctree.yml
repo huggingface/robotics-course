@@ -1,0 +1,31 @@
+- title: "0. Добро пожаловать в курс по робототехнике"
+  sections:
+  - local: unit0/1
+    title: Добро пожаловать в курс по робототехнике
+  - local: unit0/2
+    title: Начало работы с LeRobot
+
+- title: "1. Введение в курс"
+  sections:
+  - local: unit1/1
+    title: Введение в обучение роботов
+  - local: unit1/2
+    title: LeRobot — библиотека с открытым исходным кодом
+  - local: unit1/3
+    title: LeRobotDataset
+  - local: unit1/4
+    title: "Пример кода: Пакетная обработка (потокового) набора данных"
+
+- title: "2. Классическая робототехника"
+  sections:
+  - local: unit2/1
+    title: Введение в классическую робототехнику
+  - local: unit2/2
+    title: Типы движения роботов
+  - local: unit2/3
+    title: Кинематика роботов
+  - local: unit2/4
+    title: Системы управления и их ограничения
+  - local: unit2/5
+    title: От классической к основанной на обучении робототехнике
+

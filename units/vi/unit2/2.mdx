@@ -1,0 +1,51 @@
+# Các Loại Chuyển Động Của Robot
+
+<img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-platforms.png" alt="Robotics Platforms" style="width: 70%;" />
+
+Các loại chuyển động khác nhau đòi hỏi nền tảng robot rất khác biệt. Từ trái sang phải, trên xuống dưới: ViperX, SO-100, Boston Dynamics' Spot, Open-Duck, 1X's NEO, Boston Dynamics' Atlas.
+
+Trong phần này, chúng ta sẽ tổ chức không gian hành vi robot để bạn nhanh chóng nhận dạng loại vấn đề đang giải quyết và chọn công cụ phù hợp.
+
+Hầu hết ngành robot học liên quan đến việc tạo chuyển động bằng cách điều khiển các khớp nối liên kết cứng. Điểm khác biệt chính giữa các lĩnh vực robot nằm ở thứ robot đang cố thay đổi: thế giới xung quanh, vị trí của chính nó, hoặc cả hai.
+
+Hầu hết vấn đề thuộc một trong ba loại:
+
+**Thao tác (Manipulation)** liên quan đến việc robot thay đổi môi trường xung quanh trong khi giữ nguyên vị trí. Robot tác động lên thế giới - cầm nắm vật thể, lắp ráp bộ phận, hoặc sử dụng công cụ. Hãy nghĩ về cánh tay robot trong nhà máy nhặt các bộ phận và lắp ráp chúng.
+
+**Di chuyển (Locomotion)** liên quan đến việc robot thay đổi vị trí trong môi trường. Bao gồm robot bánh xe (như nền di động và xe tự hành) và robot chân (như robot đi bộ và robot bốn chân) di chuyển qua môi trường.
+
+**Thao tác Di động (Mobile Manipulation)** kết hợp cả hai khả năng, tạo ra hệ thống vừa di chuyển qua môi trường vừa thao tác vật thể. Những vấn đề này phức tạp hơn vì cần phối hợp nhiều biến điều khiển hơn so với chỉ di chuyển hoặc chỉ thao tác.
+
+<!-- TODO: Sơ đồ: ba ô song song (Thao tác, Di chuyển, Thao tác Di động) với 1–2 ví dụ mỗi loại (vd: nhặt-và-đặt; robot bốn chân đi bộ; nền di động có cánh tay). Bao gồm quan sát điển hình (RGB, độ sâu, cảm giác bản thể) và không gian hành động (vận tốc khớp vs vận tốc nền). -->
+
+> [!TIP]
+> Mẹo nhanh: hỏi "cái gì thay đổi nhiều nhất?" Nếu chủ yếu thế giới (tư thế/trạng thái vật thể) thay đổi, đó là thao tác. Nếu chủ yếu tư thế robot thay đổi, đó là di chuyển. Nếu cả hai thay đổi theo cách kết hợp chặt chẽ, đó là thao tác di động. Dùng quy tắc này để quyết định cảm biến cần ghi và không gian hành động cần dự đoán.
+
+Gần đây, sự phát triển của bộ thao tác chi phí thấp như nền tảng ALOHA, ALOHA-2 và SO-100/SO-101 đã giảm đáng kể rào cản gia nhập ngành robot, xét đến khả năng tiếp cận tăng lên so với nền tảng truyền thống như cánh tay Franka Emika Panda.
+
+<img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-cost-accessibility.png" alt="Robot Cost Comparison" style="width: 40%;" />
+
+Robot rẻ hơn, dễ tiếp cận hơn đang bắt đầu cạnh tranh với nền tảng truyền thống như cánh tay Panda trong các kịch bản hạn chế tài nguyên. Đặc biệt, SO-100 có chi phí khoảng vài trăm Euro, và có thể in 3D hoàn toàn trong vài giờ, trong khi cánh tay Panda sản xuất công nghiệp tốn hàng chục nghìn Euro và không mở bán công khai.
+
+Khối lượng công trình truyền thống phát triển từ buổi sơ khai của ngành robot ngày càng được bổ sung bởi các phương pháp dựa trên học máy. Học máy đã chứng minh tính chuyển đổi đặc biệt trên toàn bộ chồng công nghệ robot, đầu tiên trao quyền cho kỹ thuật dựa trên lập kế hoạch với ước lượng trạng thái cải tiến dùng cho lập kế hoạch truyền thống, sau đó thay thế hoàn toàn bộ điều khiển, tạo ra hiệu quả các phương pháp từ nhận thức đến hành động.
+
+Trong khi các mô hình tường minh đã chứng minh tính nền tảng trong việc đạt các cột mốc quan trọng phát triển robot hiện đại, các công trình gần đây sử dụng mô hình ẩn tỏ ra đặc biệt hứa hẹn trong việc vượt qua thách thức về khả năng mở rộng và ứng dụng thông qua học máy.
+
+<img src="https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/robotics-course/classical-vs-robot-learning.png"  
+     alt="Classical vs Robot Learning"  
+     width="600" height="200">  
+
+Chúng ta sẽ tái sử dụng phân loại này trong các chương sau khi thảo luận về dữ liệu (modalities to record) và chính sách (what action chunks to predict) cho mỗi loại.
+
+## Tài liệu tham khảo
+"Để xem danh sách đầy đủ các tài liệu tham khảo, hãy xem [hướng dẫn](https://huggingface.co/spaces/lerobot/robot-learning-tutorial).
+
+- **ALOHA 2: An Enhanced Low-Cost Hardware for Bimanual Teleoperation** (2024)  
+  Jorge Aldaco et al.  
+  Bài báo mô tả tiến bộ trong nền tảng thao tác dễ tiếp cận, minh chứng cách phần cứng rẻ tiếp cận kích hoạn nghiên cứu trên các nhiệm vụ thao tác.  
+  [Project Page](https://aloha-2.github.io/)
+
+- **Learning Agile and Dynamic Motor Skills for Legged Robots** (2019)  
+  Joonho Hwangbo et al.  
+  Một bài báo quan trọng minh chứng các phương pháp dựa trên học máy để di chuyển, chứng minh cách học máy có thể kích hoạt robot bốn chân thực hiện chuyển động đa dạng và động.  
+  [arXiv:1901.08652](https://huggingface.co/papers/1901.08652)

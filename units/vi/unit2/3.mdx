@@ -1,0 +1,115 @@
+# Hiểu về Động học Robot
+
+Trong phần này, chúng ta sẽ xây dựng trực giác về động học robot thông qua một ví dụ cụ thể. Động học mô tả mối quan hệ toán học giữa góc khớp và vị trí bộ tác động cuối - với cấu hình khớp cho trước, tay robot sẽ ở đâu? Chúng ta sẽ khám phá khái niệm cơ bản này bằng cách đi qua một trường hợp đơn giản nhưng tiêu biểu.
+
+Hãy cùng xem cách tiếp cận robot truyền thống hoạt động thông qua một ví dụ cụ thể mà bạn có thể làm theo từng bước.
+
+## Từ Phức tạp đến Đơn giản: Ví dụ SO-100
+
+Chúng ta bắt đầu với một nền tảng robot quen thuộc và đơn giản hóa có hệ thống để tách biệt các nguyên tắc động học cốt lõi mà không cần độ phức tạp không cần thiết.
+
+<img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-so100-to-planar-manipulator.png" alt="SO-100 to Planar Manipulator" style="width: 70%;" />
+
+Cánh tay SO-100 được đơn giản hóa thành bộ thao tác phẳng 2D bằng cách giới hạn một số khớp.
+
+SO-100 là cánh tay robot 6 bậc tự do (6-DOF). Để hiểu các nguyên tắc, hãy đơn giản hóa nó thành **bộ thao tác phẳng 2-DOF** bằng cách giới hạn một số khớp.
+
+## Robot Đơn giản hóa
+
+<!-- TODO: Reimplement this in vanilla python -->
+
+Để giữ cho toán học rõ ràng, robot đơn giản của chúng ta có:
+- **Hai khớp** với góc θ₁ và θ₂  
+- **Hai liên kết** có cùng chiều dài *l*
+- **Cấu hình** q = [θ₁, θ₂] ∈ [-π, +π]²
+
+## Động học Thuận: Từ Khớp đến Vị trí
+
+**Câu hỏi:** Với góc khớp θ₁ và θ₂ cho trước, bộ tác động cuối ở đâu?
+
+**Trả lời:** Ta có thể tính toán vị trí bộ tác động cuối bằng toán học:
+
+$$p(q) = \begin{pmatrix} l \cos(\theta_1) + l \cos(\theta_1 + \theta_2) \\ l \sin(\theta_1) + l \sin(\theta_1 + \theta_2) \end{pmatrix}$$
+
+Đây gọi là **Động học Thuận (FK)** - ánh xạ từ không gian khớp sang không gian tác vụ.
+
+<!-- TODO: Small diagram: two-link arm in the plane with angles θ₁, θ₂ and link length l, showing how the two vector contributions add head-to-tail to reach p(q). -->
+
+> [!TIP]
+> **Hiểu Toán học:** Phương trình này đến từ lượng giác cơ bản! 
+> - Liên kết đầu: điểm cuối tại $(l \cos(\theta_1), l \sin(\theta_1))$
+> - Liên kết thứ hai: bắt đầu từ cuối liên kết đầu, xoay góc $\theta_1 + \theta_2$
+> - Vị trí cuối: tổng đóng góp của cả hai liên kết
+>
+> **Tại sao quan trọng:** Với robot đơn giản, FK tương đối dễ - cho góc khớp, ta luôn tính được vị trí tay robot. Robot phức tạp hơn - ví dụ bàn tay khéo léo - sẽ khó mô hình hóa hơn.
+
+## Động học Nghịch: Từ Vị trí đến Khớp
+
+Giờ hãy thử đảo ngược ánh xạ: với vị trí tay mong muốn, cấu hình khớp nào đạt được nó?
+
+**Câu hỏi:** Với vị trí bộ tác động cuối mong muốn p*, ta nên dùng góc khớp nào?
+
+**Trả lời:** Đây là **Động học Nghịch (IK)** - thường phức tạp hơn để giải, vì liên quan đến ma trận Jacobian của hàm động học thuận!
+
+Ta cần giải: $p(q) = p^*$
+
+Tổng quát, nó trở thành bài toán tối ưu:
+$$\min_{q \in \mathcal{Q}} \|p(q) - p^*\|_2^2$$
+
+<!-- TODO: Workspace sketch: a reachable annulus for a 2‑link arm (inner radius |l₁−l₂|, outer radius l₁+l₂), with an in‑workspace and out‑of‑workspace target p*. -->
+
+> [!WARNING]
+> **Tại sao IK Khó:**
+> - **Nhiều nghiệm** - Cùng vị trí cuối có thể đạt được bằng góc khớp khác nhau
+>
+> - **Phương trình phi tuyến** - Một số hàm khiến nghiệm phân tích khó khăn
+> - **Ràng buộc** - Giới hạn khớp và vật cản làm phức tạp thêm bài toán
+>
+> Đây là lý do kỹ sư robot dành nhiều thời gian cho thuật toán IK!
+
+## Thách thức của Ràng buộc
+
+<img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-planar-manipulator-free.png" alt="Free Motion" style="width: 100%; max-width: 200px;" />
+
+*Di chuyển tự do*
+
+<img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-planar-manipulator-floor.png" alt="Floor Constraint" style="width: 100%; max-width: 200px;" />
+
+*Bị giới hạn bởi sàn*
+
+<img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-planar-manipulator-floor-shelf.png" alt="Multiple Constraints" style="width: 100%; max-width: 200px;" />
+
+*Nhiều vật cản*
+
+Robot thực tế đối mặt **ràng buộc**:
+- **Giới hạn vật lý** - Không thể di chuyển xuyên sàn
+- **Vật cản** - Phải tránh va chạm  
+- **Giới hạn khớp** - Phạm vi chuyển động hữu hạn
+
+Những ràng buộc này khiến không gian cấu hình khả thi $\mathcal{Q}$ phức tạp hơn nhiều!
+
+## Hiểu biết Chính
+
+Ngay cả với **robot 2-DOF đơn giản** này, giải IK với ràng buộc không hề tầm thường. Robot thực tế có:
+- **6+ bậc tự do**
+- **Hình học phức tạp**  
+- **Môi trường động**
+- **Mô hình không chắc chắn**
+
+Cách tiếp cận truyền thống đòi hỏi **mô hình toán học phức tạp** và **kiến thức chuyên môn** cho từng trường hợp cụ thể.
+
+> [!TIP]
+> Mô hình tư duy: FK là máy tính trực tiếp (q → p) và thường dễ; IK là tìm kiếm (p → q) và trở nên khó khi thêm giới hạn không gian làm việc, vật cản, hoặc ràng buộc khớp. Khi IK trở nên dễ vỡ, chúng ta sẽ chuyển sang lập luận vi phân (tốc độ) trong bước tiếp theo.
+
+## Tài liệu tham khảo
+"Để xem danh sách đầy đủ các tài liệu tham khảo, hãy xem [hướng dẫn](https://huggingface.co/spaces/lerobot/robot-learning-tutorial).
+
+- **Modern Robotics: Mechanics, Planning, and Control** (2017)  
+  Kevin M. Lynch and Frank C. Park  
+  Chương 4 cung cấp một xử lý sâu sắc về động học thuận với nhiều ví dụ, trong khi Chương 6 xử lý động học nghịch với cả phương pháp phân tích và số học.  
+  [Book Website](http://hades.mech.northwestern.edu/index.php/Modern_Robotics)
+
+- **Introduction to Robotics: Mechanics and Control** (2005)  
+  John J. Craig  
+  Một sách giáo khoa cổ điển với bao phủ chi tiết về động học robot, bao gồm phương pháp Denavit-Hartenberg và các phương pháp hệ thống để giải các bài toán động học thuận và nghịch.  
+  [Publisher Link](https://www.pearson.com/en-us/subject-catalog/p/introduction-to-robotics-mechanics-and-control/P200000003519)

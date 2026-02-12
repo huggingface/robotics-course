@@ -1,0 +1,33 @@
+# LeRobot: Thư viện Học Máy Robot Từ Đầu Đến Cuối
+
+<img src="https://huggingface.co/robotics-course/images/resolve/main/ch1/ch1-lerobot-figure1.png" alt="Tổng quan Thư viện LeRobot" style="width: 100%;" />
+
+Giờ chúng ta đã tìm hiểu một chút về lịch sử, hãy cùng khám phá thư viện Python chính mà chúng ta sẽ sử dụng xuyên suốt khóa học này: LeRobot.
+
+LeRobot là một thư viện mã nguồn mở dành cho robot do Hugging Face phát triển. Hãy coi nó như một bộ công cụ hoàn chỉnh xử lý mọi thứ từ việc điều khiển robot thực đến huấn luyện các thuật toán học máy tiên tiến, tất cả trong một nơi sử dụng PyTorch.
+
+Điều làm cho LeRobot đặc biệt là nó được "tích hợp theo chiều dọc". Điều này có nghĩa là nó cung cấp một cách thống nhất để làm việc với robot thực, xử lý dữ liệu đa phương thức phức tạp (như kết hợp luồng camera với dữ liệu cảm biến) và tích hợp liền mạch với các công cụ PyTorch và Hugging Face mà bạn có thể đã biết. Về cơ bản, LeRobot hướng tới trở thành thư viện một cửa cho các dự án học máy robot.
+
+> [!TIP]
+> **Robot được hỗ trợ:** LeRobot hiện hỗ trợ các nền tảng dễ tiếp cận như **SO-100/SO-101** (cánh tay có thể in 3D) và **ALOHA/ALOHA-2** (thao tác hai tay). Để xem danh sách cập nhật các nền tảng được hỗ trợ, hãy xem [tài liệu chính thức](https://huggingface.co/docs/lerobot).
+
+Một lợi thế chính là LeRobot sử dụng cách tiếp cận tiêu chuẩn để kết nối với các nền tảng robot khác nhau. Điều này có nghĩa là việc thêm hỗ trợ cho các robot mới yêu cầu ít công việc hơn so với việc bắt đầu từ đầu. Thư viện cũng giới thiệu `LeRobotDataset`, một định dạng đặc biệt cho dữ liệu robotics mà cộng đồng mã nguồn mở đã sử dụng để chia sẻ dữ liệu một cách hiệu quả.
+
+LeRobot bao gồm các triển khai của nhiều thuật toán học máy tiên tiến, tất cả được xây dựng với PyTorch cho hiệu suất. Nó cũng cung cấp các công cụ để chạy thí nghiệm và theo dõi kết quả. Điều quan trọng nhất cho các ứng dụng thực tế là LeRobot tách phần "suy nghĩ" (lập kế hoạch việc gì làm) khỏi phần "làm" (thực hiện hành động). Việc tách này là quan trọng vì nó cho phép robot phản ứng nhanh hơn và thích ứng tốt hơn khi các thứ không diễn ra chính xác như dự kiến.
+
+> [!WARNING]
+> **Ghi chú về hiệu suất:** Stack inference tối ưu của LeRobot là quan trọng cho việc điều khiển robot thực tế, nơi việc trễ của thời gian thậm chí chỉ vài mili giây cũng ảnh hưởng đến hiệu suất. Việc tách phần lập kế hoạch và thực hiện là một điểm đột phá quan trọng.
+
+## Tham khảo
+
+Để xem danh sách đầy đủ các tham khảo, hãy xem [hướng dẫn](https://huggingface.co/spaces/lerobot/robot-learning-tutorial).
+
+- **RT-1: Robotics Transformer for Real-World Control at Scale** (2023)  
+  Anthony Brohan et al.  
+  Bài báo này minh chứng cách áp dụng transformer cho việc điều khiển robot thực tế trên quy mô, cho thấy sức mạnh của việc học từ các tập dữ liệu lớn và đa dạng.  
+  [arXiv:2212.06817](https://huggingface.co/papers/2212.06817)
+
+- **Open X-Embodiment: Robotic Learning Datasets and RT-X Models** (2023)  
+  Open X-Embodiment Collaboration
+  Một nỗ lực hợp tác nhằm tạo ra các tập dữ liệu robot đa dạng, quy mô lớn trên nhiều phương án thực hiện, chứng minh tầm quan trọng của việc chia sẻ dữ liệu trong việc thúc đẩy quá trình học tập của robot.
+  [arXiv:2310.08864](https://huggingface.co/papers/2310.08864)

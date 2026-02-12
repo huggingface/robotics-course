@@ -1,0 +1,466 @@
+# Ví dụ về mã: Bộ dữ liệu trong thực tế
+
+Phần này sẽ hướng dẫn bạn cách làm việc với các bộ dữ liệu robotics từ Hugging Face bằng cách sử dụng lớp LeRobotDataset. Chúng ta sẽ bắt đầu với các ví dụ đơn giản và dần dần thêm độ phức tạp, để bạn có thể sao chép và điều chỉnh cách tiếp cận phù hợp nhất với dự án của mình.
+
+Điều quan trọng cần hiểu là bất kỳ bộ dữ liệu nào trên Hub tuân theo định dạng của LeRobot (với dữ liệu dạng bảng, dữ liệu hình ảnh và siêu dữ liệu đi kèm) đều có thể được tải chỉ với một dòng mã.
+
+Khi làm việc với dữ liệu robotics, bạn thường cần xem xét nhiều bước thời gian cùng một lúc thay vì từng điểm dữ liệu riêng lẻ. Tại sao? Vì hầu hết các thuật toán học robot cần thấy mọi thứ thay đổi theo thời gian như thế nào. Ví dụ, để nhặt một vật thể, robot có thể cần xem những gì đã xảy ra trong vài khoảnh khắc trước đó để hiểu rõ hơn tình hình hiện tại. Tương tự, nhiều thuật toán hoạt động tốt hơn khi chúng có thể lên kế hoạch cho một số hành động tiếp theo thay vì chỉ quyết định phải làm gì ngay lúc này.
+
+LeRobotDataset giúp việc này trở nên dễ dàng với "cửa sổ thời gian". Bạn chỉ cần khai báo các độ lệch thời gian mong muốn (ví dụ: khung hình hiện tại cộng với hai khung hình trước đó), và nó tự động xử lý sự phức tạp của việc lấy các khung hình đó, ngay cả khi một số khung có thể bị thiếu ở đầu hoặc cuối một tập.
+
+![streaming-multiple-frames](https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/lerobotdataset-v3/streaming-multiple-frames.png)
+
+> [!TIP]
+> **Giải thích về Cửa sổ Thời gian:** 
+> - **Lịch sử quan sát**: `[-0.2, -0.1, 0.0]` cung cấp cho bạn các quan sát tại 200ms, 100ms trước và hiện tại
+> - **Chuỗi hành động**: `[0.0, 0.1, 0.2]` cung cấp hành động hiện tại và 2 hành động tiếp theo (cách nhau 100ms)
+> - **Tự động đệm**: Các khung hình bị thiếu ở ranh giới tập được xử lý tự động. Bộ dữ liệu luôn trả về đúng số khung hình được yêu cầu, và nó áp dụng đệm khi cần thiết.
+> - **Bao gồm mặt nạ**: Biết được khung hình nào là thực và khung hình nào được đệm để huấn luyện đúng cách
+
+Một cách tiện lợi, bằng cách sử dụng LeRobotDataset với `DataLoader` của PyTorch, ta có thể tự động kết hợp các từ điển mẫu riêng lẻ từ bộ dữ liệu thành một từ điển duy nhất chứa các tensor đã gộp lô để huấn luyện hoặc suy luận tiếp theo. LeRobotDataset cũng hỗ trợ sẵn chế độ streaming cho bộ dữ liệu. Người dùng có thể stream dữ liệu từ một bộ dữ liệu lớn được lưu trữ trên Hugging Face Hub, chỉ với một dòng thay đổi trong mã triển khai. Các bộ dữ liệu streaming hỗ trợ xử lý hàng loạt hiệu suất cao (khoảng 80-100 it/s, tùy thuộc vào kết nối) và mức độ ngẫu nhiên hóa khung hình cao, những tính năng quan trọng cho các thuật toán BC thực tế mà nếu không có thì có thể chậm hoặc hoạt động trên dữ liệu không i.i.d. Tính năng này được thiết kế để cải thiện khả năng tiếp cận sao cho người dùng có thể xử lý các bộ dữ liệu lớn mà không cần lượng lớn bộ nhớ và dung lượng lưu trữ.
+
+Dưới đây là các cách khác nhau để thiết lập cửa sổ thời gian tùy thuộc vào trường hợp sử dụng của bạn. Hãy xem lướt qua các tùy chọn và chọn một để bắt đầu - việc chuyển đổi sau này chỉ là thay đổi từ điển.
+
+<hfoptions id="temporal-windows">
+<hfoption id="basic-bc">
+
+**Mô phỏng Hành vi Cơ bản** (học hành động hiện tại từ quan sát hiện tại):
+
+```python
+# Đơn giản: quan sát hiện tại → hành động hiện tại
+delta_timestamps = {
+    "observation.images.wrist_camera": [0.0],  # Chỉ khung hình hiện tại
+    "action": [0.0]  # Chỉ hành động hiện tại
+}
+
+dataset = LeRobotDataset(
+    "lerobot/svla_so101_pickplace", 
+    delta_timestamps=delta_timestamps
+)
+```
+
+</hfoption>
+<hfoption id="history-bc">
+
+**Mô phỏng Hành vi dựa trên Lịch sử** (sử dụng lịch sử quan sát để đưa ra quyết định tốt hơn):
+
+```python
+# Sử dụng lịch sử quan sát để có ngữ cảnh
+delta_timestamps = {
+    "observation.images.wrist_camera": [-0.2, -0.1, 0.0],  # Lịch sử 200ms
+    "action": [0.0]  # Hành động hiện tại
+}
+
+dataset = LeRobotDataset(
+    "lerobot/svla_so101_pickplace",
+    delta_timestamps=delta_timestamps
+)
+
+sample = dataset[100]
+# Hình ảnh có kích thước: [3, C, H, W] - 3 khung hình lịch sử
+# Hành động có kích thước: [action_dim] - một hành động hiện tại
+```
+
+</hfoption>
+<hfoption id="action-chunking">
+
+**Chia nhỏ Hành động** (dự đoán chuỗi hành động để kiểm soát mượt mà hơn):
+
+```python
+# Dự đoán nhiều hành động tương lai cùng một lúc
+delta_timestamps = {
+    "observation.images.wrist_camera": [-0.1, 0.0],  # Gần đây + hiện tại
+    "action": [0.0, 0.1, 0.2, 0.3]  # Hiện tại + 3 hành động tương lai
+}
+
+dataset = LeRobotDataset(
+    "lerobot/svla_so101_pickplace",
+    delta_timestamps=delta_timestamps
+)
+
+sample = dataset[100] 
+# Hình ảnh có kích thước: [2, C, H, W] - 2 khung quan sát
+# Hành động có kích thước: [4, action_dim] - 4 dự đoán hành động
+```
+
+</hfoption>
+</hfoptions>
+
+### Truyền phát các bộ dữ liệu lớn
+
+> [!TIP]
+> **Khi nào nên sử dụng truyền phát:**
+> - **Bộ dữ liệu > khả năng lưu trữ** - Truyền các bộ dữ liệu không tương thích với khả năng lưu trữ của bạn
+> - **Thí nghiệm** - Thử nghiệm nhanh với các bộ dữ liệu khác nhau mà không cần tải xuống
+> - **Huấn luyện trên đám mây** - Giảm thời gian khởi động bằng cách truyền từ Hub của Hugging Face
+> - **Kết nối internet ổn định** - Cần kết nối internet ổn định trong suốt quá trình huấn luyện
+>
+> **Hiệu suất:** Truyền phát đạt 80-100 it/s với kết nối tốt! Điều này (trung bình) tương đương với các bộ dữ liệu được lưu trữ cục bộ, bỏ qua chi phí khởi động.
+
+<hfoptions id="dataset-loading">
+<hfoption id="download">
+
+**Tải xuống Bộ dữ liệu** (huấn luyện nhanh hơn, cần không gian lưu trữ):
+
+```python
+from lerobot.datasets.lerobot_dataset import LeRobotDataset
+
+# Tải xuống bộ dữ liệu vào cache cục bộ
+dataset = LeRobotDataset("lerobot/svla_so101_pickplace")
+
+# Truy cập nhanh sau khi tải xuống
+sample = dataset[100]
+```
+
+</hfoption>
+<hfoption id="streaming">
+
+**Truyền phát Bộ dữ liệu** (không cần không gian lưu trữ, cần kết nối internet):
+
+```python
+from lerobot.datasets.streaming_dataset import StreamingLeRobotDataset
+
+# Truyền dữ liệu mà không cần tải xuống
+streaming_dataset = StreamingLeRobotDataset(
+    "lerobot/svla_so101_pickplace",
+    delta_timestamps=delta_timestamps
+)
+
+# Hoạt động giống như bộ dữ liệu thông thường
+sample = streaming_dataset[100]
+```
+
+</hfoption>
+</hfoptions>
+
+## Tích hợp Huấn luyện
+
+Bạn có thể dễ dàng tích hợp các bộ dữ liệu thông thường và streaming với các loader dữ liệu PyTorch. Điều này giúp việc tích hợp bất kỳ LeRobotDataset nào với bạn (`torch`) huấn luyện vòng lặp đơn giản. Vì chúng ta lấy tất cả các khung hình từ các bộ dữ liệu dưới dạng tensor, việc lặp lại qua một bộ dữ liệu với huấn luyện trở nên rất tiện lợi.
+
+### PyTorch DataLoader
+Bạn có thể dễ dàng tích hợp các bộ dữ liệu thông thường và streaming với các loader dữ liệu PyTorch. Điều này giúp việc tích hợp bất kỳ LeRobotDataset nào với bạn (`torch`) huấn luyện vòng lặp đơn giản. Vì chúng ta lấy tất cả các khung hình từ các bộ dữ liệu dưới dạng tensor, việc lặp lại qua một bộ dữ liệu với huấn luyện trở nên rất tiện lợi.
+```python
+import torch
+from torch.utils.data import DataLoader
+# Tạo DataLoader cho huấn luyện
+dataloader = DataLoader(
+    dataset,
+    batch_size=16,
+    shuffle=True,
+    num_workers=4
+)
+
+# Vòng lặp huấn luyện
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+for batch in dataloader:
+    # Di chuyển đến thiết bị
+    observations = batch["observation.state"].to(device)
+    actions = batch["action"].to(device)
+    images = batch["observation.images.wrist_camera"].to(device)
+    
+    # Huấn luyện mô hình ở đây
+    # loss = model(observations, images, actions)
+    # loss.backward()
+    # optimizer.step()
+```
+
+## Tại Sao Điều Này Quan Trọng
+
+API đơn giản này ẩn chứa độ phức tạp đáng kể:
+- ✅ **Đồng bộ hóa đa phương thức** - Hình ảnh và cảm biến được căn chỉnh hoàn hảo
+- ✅ **Lưu trữ hiệu quả** - Video nén, mảng ánh xạ bộ nhớ
+- ✅ **Xử lý thời gian** - Truy cập dễ dàng vào chuỗi quan sát/hành động  
+- ✅ **Khả năng mở rộng** - Cùng mã nguồn hoạt động cho cả bộ dữ liệu nhỏ và khổng lồ
+
+So sánh với cách xử lý dữ liệu robot truyền thống thường yêu cầu:
+- Bộ phân tích tùy chỉnh cho mỗi định dạng dữ liệu
+- Đồng bộ hóa thủ công giữa các phương thức
+- Bộ đệm phức tạp cho cửa sổ thời gian
+- Mã tải riêng biệt cho từng nền tảng
+
+LeRobotDataset **chuẩn hóa và đơn giản hóa** tất cả những điều này!
+
+<!-- TODO: Bảng nhỏ so sánh "Truyền thống" vs "LeRobotDataset" (bộ phân tích, đồng bộ, bộ đệm, mã nền tảng). -->
+
+## Bài Kiểm tra Phần
+
+Kiểm tra hiểu biết của bạn về LeRobot và vai trò của nó trong robot learning:
+
+### 1. Điều gì khiến LeRobot khác biệt so với thư viện robot truyền thống?
+
+<Question
+	choices={[
+		{
+			text: "Nó chỉ hoạt động với môi trường mô phỏng.",
+			explain: "LeRobot thực tế tập trung vào robot thực tế và hỗ trợ nhiều nền tảng vật lý."
+		},
+		{
+			text: "Nó cung cấp tích hợp end-to-end xuyên suốt toàn bộ hệ sinh thái robot với các thuật toán học máy tiên tiến nhất.",
+			explain: "Đổi mới chính của LeRobot là kết hợp điều khiển phần cứng, xử lý dữ liệu và thuật toán học máy trong một thư viện thống nhất.",
+            correct: true
+		},
+		{
+			text: "Nó yêu cầu robot công nghiệp đắt tiền để hoạt động.",
+			explain: "LeRobot tập trung vào robot chi phí thấp, dễ tiếp cận để dân chủ hóa ngành robot."
+		},
+        {
+			text: "Nó chỉ hỗ trợ các phương pháp điều khiển cổ điển.",
+			explain: "LeRobot đặc biệt tập trung vào các phương pháp dựa trên học máy, không phải điều khiển cổ điển."
+		}
+	]}
+/>
+
+### 2. Đâu KHÔNG phải là thành phần chính trong cách tiếp cận của LeRobot?
+
+<Question
+	choices={[
+		{
+			text: "Xử lý cấu hình robot cấp thấp thống nhất",
+			explain: "Đây thực sự là thành phần chính giúp tương thích đa nền tảng."
+		},
+		{
+			text: "Định dạng bộ dữ liệu robot gốc (LeRobotDataset)",
+			explain: "LeRobotDataset là đổi mới trung tâm của thư viện."
+		},
+		{
+			text: "Yêu cầu kiến thức chuyên môn cho mỗi nền tảng robot mới",
+			explain: "Đây thực chất là điều LeRobot muốn loại bỏ - nó giảm rào cản chuyên môn.",
+            correct: true
+		},
+        {
+			text: "Thuật toán học máy tiên tiến nhất với triển khai PyTorch",
+			explain: "Thuật toán SOTA là tính năng cốt lõi của LeRobot."
+		}
+	]}
+/>
+
+### 3. Lợi thế chính của ngăn xếp suy luận tối ưu hóa của LeRobot là gì?
+
+<Question
+	choices={[
+		{
+			text: "Giúp huấn luyện nhanh hơn trên GPU.",
+			explain: "Ngăn xếp suy luận liên quan đến triển khai, không phải tốc độ huấn luyện."
+		},
+		{
+			text: "Giảm yêu cầu bộ nhớ để lưu trữ bộ dữ liệu.",
+			explain: "Giảm bộ nhớ được xử lý bởi định dạng bộ dữ liệu, không phải ngăn xếp suy luận."
+		},
+		{
+			text: "Tách biệt lập kế hoạch hành động khỏi thực thi hành động để hiệu suất thời gian thực tốt hơn.",
+			explain: "Sự tách biệt này rất quan trọng cho điều khiển robot thời gian thực nơi độ trễ mili giây có ý nghĩa.",
+            correct: true
+		},
+        {
+			text: "Tự động tạo dữ liệu huấn luyện từ tương tác robot.",
+			explain: "Tạo dữ liệu không được xử lý bởi ngăn xếp suy luận."
+		}
+	]}
+/>
+
+### 4. LeRobot hỗ trợ những loại nền tảng robot nào?
+
+<Question
+	choices={[
+		{
+			text: "Chỉ robot thao tác như cánh tay robot.",
+			explain: "LeRobot hỗ trợ nhiều hơn cả các nền tảng thao tác."
+		},
+		{
+			text: "Nền tảng thao tác, di chuyển và điều khiển toàn bộ cơ thể.",
+			explain: "LeRobot hỗ trợ toàn bộ phổ nền tảng robot, từ cánh tay đơn giản đến robot hình người phức tạp.",
+            correct: true
+		},
+		{
+			text: "Chỉ robot có giá trên 10.000 USD.",
+			explain: "LeRobot tập trung vào các nền tảng chi phí thấp, dễ tiếp cận để dân chủ hóa ngành robot."
+		},
+        {
+			text: "Chỉ robot sản xuất bởi các công ty cụ thể.",
+			explain: "LeRobot hỗ trợ robot nguồn mở và dễ tiếp cận từ nhiều nguồn khác nhau."
+		}
+	]}
+/>
+
+### 5. "Tích hợp end-to-end với hệ sinh thái robot" trong ngữ cảnh LeRobot nghĩa là gì?
+
+<Question
+	choices={[
+		{
+			text: "Nó chỉ xử lý lập kế hoạch cấp cao, không điều khiển cấp thấp.",
+			explain: "End-to-end nghĩa là bao gồm mọi thứ từ điều khiển cấp thấp đến thuật toán cấp cao."
+		},
+		{
+			text: "Nó bao gồm mọi thứ từ điều khiển phần cứng cấp thấp đến thuật toán học cấp cao.",
+			explain: "Phạm vi toàn diện này loại bỏ nhu cầu tích hợp nhiều công cụ riêng lẻ.",
+            correct: true
+		},
+		{
+			text: "Nó yêu cầu công cụ riêng để xử lý dữ liệu và huấn luyện mô hình.",
+			explain: "Tích hợp end-to-end nghĩa là bạn không cần công cụ riêng - mọi thứ được hợp nhất."
+		},
+        {
+			text: "Nó chỉ hoạt động với hệ điều hành cụ thể.",
+			explain: "Tích hợp nền tảng đề cập đến thành phần robot, không phải hệ điều hành."
+		}
+	]}
+/>
+
+### 6. Mục đích chính của tham số `delta_timestamps` trong LeRobotDataset là gì?
+
+<Question
+	choices={[
+		{
+			text: "Thiết lập tốc độ khung hình khi ghi video.",
+			explain: "Tốc độ khung hình được lưu trong metadata, không điều khiển bởi delta_timestamps."
+		},
+		{
+			text: "Xác định cửa sổ thời gian để truy cập lịch sử quan sát và chuỗi hành động.",
+			explain: "delta_timestamps cho phép bạn chỉ định độ lệch thời gian cần đưa vào, giúp truy cập quan sát quá khứ và hành động tương lai.",
+            correct: true
+		},
+		{
+			text: "Đồng bộ hóa dữ liệu giữa các robot khác nhau.",
+			explain: "Đồng bộ hóa giữa robot không được xử lý bởi delta_timestamps."
+		},
+        {
+			text: "Nén dữ liệu video để tiết kiệm dung lượng.",
+			explain: "Nén video được xử lý riêng trong định dạng lưu trữ bộ dữ liệu."
+		}
+	]}
+/>
+
+### 7. Ba thành phần chính của LeRobotDataset được mô tả tốt nhất bởi phát biểu nào sau đây?
+
+<Question
+	choices={[
+		{
+			text: "Hình ảnh, Hành động và Phần thưởng",
+			explain: "Dù đây là các kiểu dữ liệu quan trọng, chúng không mô tả thành phần kiến trúc."
+		},
+		{
+			text: "Dữ liệu dạng bảng, Dữ liệu hình ảnh và Metadata",
+			explain: "Đây là ba trụ cột kiến trúc: lưu trữ hiệu quả cho dữ liệu cảm biến, video nén và tệp metadata JSON.",
+            correct: true
+		},
+		{
+			text: "Tập huấn luyện, tập kiểm định và tập kiểm tra",
+			explain: "Đây là cách chia dữ liệu, không phải thành phần kiến trúc của định dạng."
+		},
+        {
+			text: "Dữ liệu mô phỏng, Robot thực và Dữ liệu lai",
+			explain: "Đây mô tả nguồn dữ liệu, không phải kiến trúc lưu trữ."
+		}
+	]}
+/>
+
+### 8. Điều gì xảy ra khi bạn dùng `StreamingLeRobotDataset` thay vì `LeRobotDataset`?
+
+<Question
+	choices={[
+		{
+			text: "Dữ liệu tự động được tăng cường để huấn luyện tốt hơn.",
+			explain: "Streaming không liên quan tăng cường dữ liệu - đó là bước tiền xử lý riêng."
+		},
+		{
+			text: "Bộ dữ liệu được tải xuống máy cục bộ nhanh hơn.",
+			explain: "Streaming thực tế tránh tải xuống toàn bộ bộ dữ liệu."
+		},
+		{
+			text: "Dữ liệu được truyền trực tiếp từ Hugging Face Hub mà không cần tải xuống, tiết kiệm dung lượng lưu trữ.",
+			explain: "StreamingLeRobotDataset cho phép xử lý bộ dữ liệu lớn mà không cần tải chúng về cục bộ.",
+            correct: true
+		},
+        {
+			text: "Bộ dữ liệu tự động chia thành tập huấn luyện/kiểm định.",
+			explain: "Việc chia dữ liệu độc lập với lựa chọn streaming hay tải xuống."
+		}
+	]}
+/>
+
+### 9. Trong bối cảnh robot learning, "temporal windowing" (cửa sổ thời gian) đề cập đến điều gì?
+
+<Question
+	choices={[
+		{
+			text: "Thời gian cần thiết để huấn luyện một mô hình robot learning.",
+			explain: "Thời gian huấn luyện không phải là ý nghĩa của temporal windowing."
+		},
+		{
+			text: "Truy cập nhiều bước thời gian của quan sát và hành động xung quanh một frame nhất định.",
+			explain: "Temporal windowing cho phép các thuật toán sử dụng lịch sử quan sát và chuỗi hành động, rất quan trọng trong robot learning.",
+            correct: true
+		},
+		{
+			text: "Tần suất mà cảm biến robot thu thập dữ liệu.",
+			explain: "Tần suất cảm biến tách biệt với temporal windowing trong các bộ dữ liệu."
+		},
+        {
+			text: "Khoảng thời gian của mỗi tập (episode) hoặc quỹ đạo của robot.",
+			explain: "Thời lượng tập khác với temporal windowing trong các tập."
+		}
+	]}
+/>
+
+### 10. Lợi thế chính của cách tiếp cận lưu trữ dữ liệu video trong LeRobotDataset là gì?
+
+<Question
+	choices={[
+		{
+			text: "Video được lưu trữ ở chất lượng cao nhất có thể.",
+			explain: "Chất lượng không phải là trọng tâm chính - hiệu quả và khả năng mở rộng mới là yếu tố quan trọng."
+		},
+		{
+			text: "Mỗi frame được lưu trữ dưới dạng một tệp riêng biệt để dễ dàng truy cập.",
+			explain: "Cách này thực sự không hiệu quả - LeRobotDataset làm ngược lại."
+		},
+		{
+			text: "Nhiều tập (episodes) được nối vào các tệp MP4 lớn hơn để giảm tải cho hệ thống tệp.",
+			explain: "Cách tiếp cận này giảm đáng kể số lượng tệp, giúp lưu trữ hiệu quả hơn cho các bộ dữ liệu lớn.",
+            correct: true
+		},
+        {
+			text: "Video được tự động nén bằng các thuật toán AI.",
+			explain: "Chỉ sử dụng nén video tiêu chuẩn, không phải nén dựa trên AI."
+		}
+	]}
+/>
+
+### 11. Phát biểu nào về tính tương thích của LeRobotDataset là chính xác?
+
+<Question
+	choices={[
+		{
+			text: "Nó chỉ hoạt động với các thương hiệu robot cụ thể như SO-100.",
+			explain: "LeRobotDataset được thiết kế để hoạt động trên nhiều nền tảng robot khác nhau."
+		},
+		{
+			text: "Nó yêu cầu mã tùy chỉnh cho mỗi nền tảng robot mới.",
+			explain: "Định dạng thống nhất giảm nhu cầu viết mã tùy chỉnh cho từng nền tảng."
+		},
+		{
+			text: "Nó tích hợp liền mạch với PyTorch DataLoader và hệ sinh thái Hugging Face.",
+			explain: "Sự tích hợp này giúp dễ dàng sử dụng dữ liệu robot với các quy trình học máy hiện có.",
+            correct: true
+		},
+		{
+			text: "Nó chỉ hỗ trợ dữ liệu mô phỏng, không phải dữ liệu robot thực tế.",
+			explain: "LeRobotDataset hỗ trợ cả dữ liệu mô phỏng và robot thực tế."
+		}
+	]}
+/>
+
+## Tài liệu tham khảo
+
+Để xem danh sách đầy đủ các tài liệu tham khảo, hãy xem [hướng dẫn](https://huggingface.co/spaces/lerobot/robot-learning-tutorial).
+
+- **Diffusion Policy: Visuomotor Policy Learning via Action Diffusion** (2024)  
+  Cheng Chi et al.  
+  Bài báo này giới thiệu mô hình khuếch tán (diffusion models) cho việc học chính sách robot và thảo luận cách sử dụng cửa sổ thời gian (temporal windowing) và phân đoạn hành động (action chunking) để kích hoạt điều khiển thị giác-vận động mượt mà.  
+  [arXiv:2303.04137](https://huggingface.co/papers/2303.04137)
+
+- **RT-2: Vision-Language-Action Models Transfer Web Knowledge to Robotic Control** (2023)  
+  Anthony Brohan et al.  
+  Minh chứng cách các mô hình thị giác-ngôn ngữ có thể được tinh chỉnh cho điều khiển robot, bao gồm thảo luận về cửa sổ ngữ cảnh thời gian (temporal context windows) và tầm nhìn dự đoán hành động (action prediction horizons).  
+  [arXiv:2307.15818](https://huggingface.co/papers/2307.15818)

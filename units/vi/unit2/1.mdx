@@ -1,0 +1,183 @@
+# Robot Cổ điển
+
+Trong phần này, chúng ta sẽ xây dựng nền tảng về robot cổ điển để giúp bạn hiểu tại sao các phương pháp dựa trên học máy lại mạnh mẽ đến vậy.
+
+Chúng ta sẽ bắt đầu bằng cách khám phá cách robot tạo ra chuyển động, xem xét các loại chuyển động robot phổ biến, và làm việc qua một ví dụ cụ thể trước khi thảo luận về những hạn chế thúc đẩy các phương pháp hiện đại.
+
+> [!TIP]
+> ## Điểm chính
+>
+> Các phương pháp robot dựa trên học máy giải quyết những thách thức cơ bản mà phương pháp truyền thống gặp khó khăn.
+>
+> Robot hiện đại cần các phương pháp có thể hoạt động trên nhiều tác vụ và loại robot khác nhau, cho phép một cách tiếp cận hoạt động hiệu quả trong nhiều tình huống thay vì yêu cầu giải pháp tùy chỉnh cho từng vấn đề. Chúng ta cũng cần giảm sự phụ thuộc vào chuyên gia con người - những người tự thiết kế quy tắc và mô hình cho mọi tình huống. Cuối cùng, lĩnh vực này cần các cách tiếp cận có thể tận dụng bộ sưu tập dữ liệu robot đang phát triển nhanh chóng, học hỏi từ tri thức tập thể được ghi lại trong các bộ dữ liệu quy mô lớn này.
+
+## Các Cách Tiếp Cận Khác Nhau Để Tạo Chuyển Động Robot
+
+Hãy bắt đầu với bức tranh tổng thể: các cách tiếp cận khác nhau khiến robot di chuyển như thế nào?
+
+<img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-approaches.png" alt="Sơ đồ thể hiện các cách tiếp cận khác nhau để tạo chuyển động robot, được tổ chức thành hai loại chính: phương pháp dựa trên động lực học tường minh bên trái (bao gồm điều khiển cổ điển, điều khiển dự đoán mô hình và tối ưu hóa quỹ đạo) và phương pháp học ẩn bên phải (bao gồm học tăng cường, học bắt chước và mạng nơ-ron). Sơ đồ minh họa phổ từ cách tiếp cận dựa trên mô hình đến dựa trên dữ liệu trong robot." style="width: 50%;" />
+
+Các phương pháp khác nhau để tạo chuyển động robot có thể được nhóm dựa trên việc chúng sử dụng mô hình toán học tường minh hay học các mẫu ẩn từ dữ liệu.
+
+Đây chỉ là tổng quan về các phương pháp tạo chuyển động khác nhau và rõ ràng là chưa đầy đủ. Tuy nhiên, nó cung cấp kiến thức cơ bản tốt về các cách tiếp cận phổ biến nhất trong bối cảnh này. Nhóm quan trọng nhất cho đến nay phụ thuộc vào việc các phương pháp khác nhau mô hình hóa tương tác robot-môi trường một cách tường minh (_dựa trên động lực học_) hay ẩn (_dựa trên học máy_).
+
+Hơn nữa, kiến thức về kỹ thuật cơ khí, điện, phần mềm, cũng như cơ học vật rắn và lý thuyết điều khiển đã được chứng minh là thiết yếu trong robot kể từ khi lĩnh vực này lần đầu tiên phát triển vào những năm 1950. Gần đây, Học máy (ML) cũng tỏ ra hiệu quả trong robot, bổ sung cho các lĩnh vực truyền thống hơn này.
+
+Là hệ quả trực tiếp của bản chất đa ngành (ít nhất là kết hợp phần cứng và phần mềm), robot đã phát triển thành một loạt các phương pháp, tất cả đều hướng đến mục đích chính là **tạo ra chuyển động nhân tạo trong thế giới vật lý**.
+
+<!-- TODO: Bảng so sánh nhỏ: Tường minh vs Ẩn vs Lai (đầu vào, kiến thức, ưu/nhược điểm). -->
+
+Trong phần này, mục tiêu của chúng ta là giới thiệu nơi các phương pháp cổ điển vượt trội, nơi chúng gặp khó khăn và tại sao các **cách tiếp cận dựa trên học máy** lại hữu ích.
+
+> [!TIP]
+> **Mô hình Tường minh vs Ẩn:**
+>
+> **Cách tiếp cận Ẩn (dựa trên học máy)** áp dụng chiến lược cơ bản khác bằng cách học các mẫu trực tiếp từ dữ liệu thay vì yêu cầu mô hình toán học tường minh. Các phương pháp này yêu cầu ít kỹ thuật chuyên ngành hơn và có thể thích ứng với môi trường phức tạp, không chắc chắn mà khó có thể mô hình hóa bằng phân tích. Mạng nơ-ron và thuật toán học tăng cường là những ví dụ điển hình của cách tiếp cận này.
+>
+> **Cách tiếp cận Tường minh (dựa trên động lực học)** dựa vào các mô hình toán học thủ công về vật lý và yêu cầu chuyên môn sâu về lĩnh vực để triển khai hiệu quả. Các phương pháp này hoạt động đặc biệt tốt cho các kịch bản được hiểu rõ, kiểm soát được nơi vật lý có thể được mô hình hóa chính xác. Ví dụ cổ điển bao gồm bộ điều khiển PID và hệ thống Điều khiển Dự đoán Mô hình vốn là xương sống của robot công nghiệp trong nhiều thập kỷ.
+>
+> **Cách tiếp cận Lai** đại diện cho một vùng đất trung gian thú vị, kết hợp độ tin cậy của kiến thức vật lý với khả năng thích ứng của hệ thống học. Các phương pháp này sử dụng kiến thức vật lý để hướng dẫn và ràng buộc quá trình học, thường đạt hiệu suất tốt hơn so với từng cách tiếp cận riêng lẻ.
+
+## Các Loại Chuyển Động Khác Nhau
+
+Giờ chúng ta đã nắm được bức tranh tổng thể, hãy xác định vấn đề: robot thường thực hiện những loại chuyển động nào?
+
+<img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-platforms.png" alt="Bộ sưu tập sáu nền tảng robot khác nhau thể hiện sự đa dạng thiết kế: ViperX (cánh tay robot để bàn nhỏ), SO-100 (cánh tay mã nguồn mở có thể in 3D), Spot của Boston Dynamics (robot bốn chân), Open-Duck (robot di động bánh xe), NEO của 1X (robot hình người) và Atlas của Boston Dynamics (robot hình người hai chân tiên tiến). Hình ảnh minh họa cách các thiết kế robot khác nhau được tối ưu cho các loại chuyển động và nhiệm vụ khác nhau." style="width: 70%;" />
+
+Các loại chuyển động khác nhau đạt được bằng các nền tảng robot có thể rất khác biệt. Từ trái sang phải, trên xuống dưới: ViperX, SO-100, Boston Dynamics' Spot, Open-Duck, 1X's NEO, Boston Dynamics' Atlas. Đây là danh sách ví dụ về các nền tảng robot và (rất) chưa đầy đủ.
+
+Ở mức độ tổng quan, hầu hết hệ thống bạn gặp thuộc một trong ba loại sau. Biết mình thuộc nhóm nào giúp bạn chọn mô hình, bộ dữ liệu và bộ điều khiển phù hợp.
+
+Trong đa số trường hợp, robot tạo ra chuyển động bằng cách kích hoạt các khớp nối các liên kết gần như hoàn toàn cứng nhắc. Sự khác biệt chính giữa các lĩnh vực trọng tâm trong robot học là liệu chuyển động tạo ra có thay đổi trạng thái tuyệt đối của môi trường thông qua tương tác khéo léo, thay đổi trạng thái tương đối của robot so với môi trường thông qua di chuyển, hay kết hợp cả hai khả năng.
+
+**Thao tác** (Manipulation) liên quan đến việc tạo chuyển động để thực hiện hành động tạo ra các thay đổi mong muốn trong môi trường. Những hiệu ứng này thường đạt được *thông qua* robot - ví dụ, cánh tay robot cầm nắm vật thể, lắp ráp linh kiện hoặc sử dụng công cụ. Robot thay đổi thế giới xung quanh trong khi vẫn ở một vị trí cố định.
+
+**Di chuyển** (Locomotion) bao gồm các chuyển động làm thay đổi vị trí vật lý của robot trong môi trường. Loại này gồm cả *di chuyển bánh xe* (như bệ di động và xe tự hành) và *di chuyển chân* (như robot đi bộ và robot bốn chân), tùy thuộc vào cơ chế robot sử dụng để di chuyển.
+
+<!-- TODO: Sơ đồ: ba ô (Thao tác, Di chuyển, Thao tác di động) với 1–2 ví dụ cụ thể mỗi loại; mũi tên thể hiện cảm biến chung (thị giác/xúc giác) nhưng không gian hành động khác nhau. -->
+
+> [!TIP]
+> Phân loại nhanh: hỏi "cái gì thay đổi?". Nếu chủ yếu thế giới thay đổi (tư thế/trạng thái vật thể), bạn đang ở lĩnh vực thao tác. Nếu chủ yếu trạng thái robot thay đổi, bạn đang ở lĩnh vực di chuyển. Nếu cả hai thay đổi đáng kể trong nhiệm vụ, bạn đang ở lĩnh vực thao tác di động. Bài kiểm tra đơn giản này giúp ích khi thiết kế quan sát, hành động và đánh giá.
+
+Chúng ta sẽ tái sử dụng phân loại này khi thảo luận về bộ dữ liệu (bạn cần cảm biến gì) và chính sách (bạn dự đoán không gian hành động nào) trong các phần tiếp theo.
+
+## Ví Dụ: Thao Tác Trên Mặt Phẳng
+
+Hãy minh họa các ý tưởng bằng một ví dụ cụ thể, tối giản mà bạn có thể phân tích từng bước.
+
+Bộ thao tác robot thường gồm một chuỗi liên kết và khớp, khớp nối thành chuỗi cuối cùng kết nối với *bộ tác động cuối* (end-effector). Các khớp được kích hoạt có nhiệm vụ tạo chuyển động cho các liên kết, trong khi bộ tác động cuối dùng để thực hiện hành động cụ thể tại vị trí mục tiêu (ví dụ: cầm/nhả vật thể bằng cách đóng/mở gripper, sử dụng công cụ chuyên dụng như tuốc-nơ-vít, v.v.).
+
+Gần đây, sự phát triển của bộ thao tác chi phí thấp như nền tảng ALOHA, ALOHA-2 và SO-100/SO-101 đã giảm đáng kể rào cản gia nhập ngành robot, xét về khả năng tiếp cận tăng lên so với các nền tảng truyền thống như cánh tay Franka Emika Panda.
+
+<img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-cost-accessibility.png" alt="So Sánh Chi Phí Robot" style="width: 40%;" />
+
+Các robot rẻ hơn, dễ tiếp cận hơn đang bắt đầu cạnh tranh với các nền tảng truyền thống như Panda trong các kịch bản hạn chế tài nguyên. Đặc biệt, SO-100 có chi phí chỉ vài trăm Euro, có thể in 3D hoàn toàn trong vài giờ, trong khi cánh tay Panda sản xuất công nghiệp tốn hàng chục nghìn Euro và không có sẵn công khai.
+
+### Động Học Thuận và Động Học Nghịch
+
+<img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-so100-to-planar-manipulator.png" alt="SO-100 sang Bộ Thao Tác Mặt Phẳng" style="width: 70%;" />
+
+Cánh tay SO-100 được đơn giản hóa thành bộ thao tác 2D mặt phẳng bằng cách hạn chế chuyển động một số khớp.
+
+Xét phiên bản đơn giản hóa của SO-100 nơi ta ngăn một số khớp di chuyển. Điều này giảm độ phức tạp từ 6 bậc tự do xuống chỉ còn 2 (cộng với gripper). Ta có thể điều khiển hai góc θ₁ và θ₂, cùng xác định cấu hình robot: q = [θ₁, θ₂].
+
+<img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-planar-manipulator-free.png" alt="Free Motion" style="width: 100%; max-width: 200px;" />
+
+*Tự do chuyển động*
+
+<img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-planar-manipulator-floor.png" alt="Floor Constraint" style="width: 100%; max-width: 200px;" />
+
+*Giới hạn bởi bề mặt*
+
+<img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-planar-manipulator-floor-shelf.png" alt="Multiple Constraints" style="width: 100%; max-width: 200px;" />
+
+*Giới hạn bởi bề mặt và chướng ngại vật (cố định)*
+
+Xét ví dụ này, ta có thể viết giải tích vị trí bộ tác động cuối $p \in \mathbb{R}^2$ dưới dạng hàm cấu hình robot $p = p(q)$:
+
+$$p(q) = \begin{pmatrix} l \cos(\theta_1) + l \cos(\theta_1 + \theta_2) \\ l \sin(\theta_1) + l \sin(\theta_1 + \theta_2) \end{pmatrix}$$
+
+**Động học thuận (Forward Kinematics - FK)** ánh xạ cấu hình robot sang tư thế bộ tác động cuối tương ứng, trong khi **Động học nghịch (Inverse Kinematics - IK)** dùng để tái cấu trúc cấu hình từ tư thế bộ tác động cuối cho trước.
+
+Trong trường hợp đơn giản này, ta có thể giải bài toán điều khiển vị trí bộ tác động cuối tới mục tiêu $p^*$ bằng cách giải giải tích $q: p(q) = p^*$. Tuy nhiên, trong trường hợp tổng quát, ta thường không thể giải giải tích mà phải dùng phương pháp tối ưu lặp:
+
+$$\min_{q \in \mathcal{Q}} \|p(q) - p^*\|_2^2$$
+
+Giải pháp giải tích chính xác cho IK càng kém khả thi khi xét tới sự hiện diện của chướng ngại vật trong không gian làm việc, tạo ra các ràng buộc lên giá trị khả dĩ của $q$.
+
+> [!TIP]
+> Nếu công thức toán có vẻ dày đặc, hãy tập trung vào ánh xạ: FK trả lời "tay ở đâu khi biết khớp?", IK hỏi "khớp nào giúp tay tới vị trí đó?". Phần còn lại của chương sẽ giải thích tại sao hướng tiếp cận IK trở nên khó khăn trong bối cảnh thực tế.
+
+### Động học nghịch vi phân
+
+Khi IK khó giải trực tiếp, ta thường tiến triển bằng cách làm việc với chuyển động nhỏ (vận tốc) thay vì vị trí tuyệt đối.
+
+Gọi $J(q)$ là ma trận Jacobian chứa đạo hàm riêng của hàm FK. Áp dụng quy tắc dây chuyền cho $p(q)$ bất kỳ, ta có $\dot{p} = J(q) \dot{q}$, liên hệ biến thiên cấu hình robot với biến thiên tư thế.
+
+Với quỹ đạo bộ tác động cuối mong muốn, động học nghịch vi phân tìm $\dot{q}(t)$ giải quyết *vận tốc* khớp thay vì *cấu hình*:
+
+$$\dot{q}(t) = \arg\min_\nu \|J(q(t)) \nu - \dot{p}^*(t)\|_2^2$$
+
+Phương pháp này thường có nghiệm dạng đóng $\dot{q} = J(q)^+ \dot{p}^*$, với $J^+(q)$ là giả nghịch đảo Moore-Penrose của $J(q)$.
+
+<!-- TODO: Micro-diagram: arrows from q -> J(q) -> p with small velocity vectors. -->
+
+### Bổ sung vòng phản hồi
+
+<img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-planar-manipulator-floor-box.png" alt="Chướng ngại vật di chuyển" style="width: 100%;" />
+
+Dù hiệu quả khi quỹ đạo mục tiêu được xác định rõ, hiệu suất động học nghịch vi phân có thể suy giảm đáng kể do sai số mô hình/bám, hoặc động lực học không được mô hình hóa trong môi trường.
+
+Để giảm thiểu ảnh hưởng của sai số mô hình, nhiễu cảm biến và nhiễu loạn khác, các pipeline cổ điển thực sự tăng cường động học nghịch vi phân bằng điều khiển phản hồi vòng kín. Trong thực tế, bám theo quỹ đạo với vòng phản hồi kín có thể bao gồm việc truyền ngược sai số giữa tư thế mục tiêu và đo được $\Delta p = p^* - p(q)$, từ đó điều chỉnh tín hiệu điều khiển thành $\dot{q} = J(q)^+ (\dot{p}^* + k_p \Delta p)$, với $k_p$ là hệ số khuếch đại (tỷ lệ).
+
+Các kỹ thuật điều khiển nâng cao hơn như tuyến tính hóa phản hồi, điều khiển PID, Bộ điều chỉnh bậc hai tuyến tính (LQR) hay Điều khiển dự báo mô hình (MPC) có thể được sử dụng để ổn định bám và loại bỏ nhiễu loạn vừa phải.
+
+<!-- TODO: Block diagram: desired trajectory → controller → robot → sensors → error → controller. -->
+
+## Hạn chế của robot học dựa trên động lực học
+
+Điều này dẫn tới câu hỏi "vậy thì sao?": các công cụ cổ điển gặp khó khăn gì trong thực tế, và tại sao điều đó thúc đẩy học máy?
+
+Dù đã có hơn 60 năm nghiên cứu robot, hệ thống tự hành vẫn chưa thể thực hiện tác vụ ở mức độ con người trong thế giới vật lý, tổng quát hóa qua (1) các hiện thực robot khác nhau (cánh tay thao tác, nền tảng di chuyển,...) và (2) tác vụ đa dạng (buộc dây giày, thao tác nhiều vật thể).
+
+<img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-classical-limitations.png" alt="Classical Limitations" style="width: 90%;" />
+
+Các phương pháp robot dựa trên động lực học gặp phải một số hạn chế: (1) việc điều phối nhiều thành phần tạo ra thách thức tích hợp; (2) nhu cầu phát triển các pipeline xử lý tùy chỉnh cho các phương thức cảm biến và nhiệm vụ được xem xét cản trở khả năng mở rộng; (3) các mô hình phân tích đơn giản hóa của các hiện tượng vật lý hạn chế hiệu suất trong thế giới thực. Cuối cùng, (4) các phương pháp dựa trên động lực học bỏ qua các xu hướng về tính sẵn có và sự phát triển của dữ liệu robot.
+
+### Những hạn chế chính
+
+**1. Thách thức tích hợp**
+Các pipeline robot dựa trên động lực học trong lịch sử đã được **phát triển tuần tự, thiết kế các khối khác nhau** hiện có trong hầu hết các kiến trúc cho các mục đích cụ thể. Tức là, cảm biến, ước lượng trạng thái, lập bản đồ, lập kế hoạch, (diff-)IK và điều khiển cấp thấp truyền thống được phát triển như các mô-đun riêng biệt với giao diện cố định. Việc xây dựng pipeline các mô-đun cụ thể này dễ bị lỗi, và sự dễ vỡ xuất hiện — cùng với các lỗi tích lũy — bất cứ khi nào có thay đổi.
+
+**2. Khả năng mở rộng hạn chế**
+Các bộ lập kế hoạch cổ điển hoạt động trên các biểu diễn trạng thái nhỏ gọn, được giả định là đủ; việc mở rộng chúng để lập luận trực tiếp trên các luồng dữ liệu thô, không đồng nhất và nhiễu là không tầm thường. Điều này dẫn đến **khả năng mở rộng hạn chế đối với dữ liệu đa phương thức và cài đặt đa nhiệm**, vì việc kết hợp các đầu vào cảm nhận chiều cao (RGB, độ sâu, xúc giác, âm thanh) truyền thống đòi hỏi nỗ lực kỹ thuật đáng kể để trích xuất các đặc trưng có ý nghĩa cho điều khiển.
+
+**3. Hạn chế về mô hình hóa**
+Bỏ qua các thách thức tích hợp và khả năng mở rộng: việc phát triển mô hình chính xác về tiếp xúc, ma sát và tuân thủ cho các hệ thống phức tạp vẫn còn khó khăn. Các xấp xỉ vật thể cứng thường không đủ khi có các vật thể biến dạng, và **việc dựa vào các mô hình xấp xỉ cản trở khả năng áp dụng thực tế** của các phương pháp được phát triển.
+
+**4. Bỏ qua xu hướng dữ liệu
+Cuối cùng, các phương pháp dựa trên động lực học (một cách tự nhiên) bỏ qua **sự gia tăng gần đây về tính sẵn có của các bộ dữ liệu robot mở**. Việc quản lý các bộ dữ liệu học thuật bởi các nhóm chuyên gia con người tập trung lớn trong lĩnh vực robot hiện đang ngày càng được bổ sung bởi **số lượng ngày càng tăng các bộ dữ liệu robot được đóng góp một cách phi tập trung** bởi các cá nhân có chuyên môn đa dạng.
+
+Tổng hợp lại, những hạn chế này thúc đẩy việc khám phá các phương pháp dựa trên học máy có thể:
+1. **Tích hợp nhận thức và điều khiển chặt chẽ hơn**
+2. **Thích ứng qua các nhiệm vụ và thể hiện** với ít can thiệp mô hình hóa chuyên gia hơn
+3. **Mở rộng hiệu suất một cách uyển chuyển** khi có nhiều dữ liệu robot hơn
+
+
+<img src="https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/robotics-course/classical-vs-robot-learning.png"  
+     alt="Classical vs Robot Learning"  
+     width="600" height="200">  
+
+## Tài liệu tham khảo
+"Để xem danh sách đầy đủ các tài liệu tham khảo, hãy xem [hướng dẫn](https://huggingface.co/spaces/lerobot/robot-learning-tutorial).
+
+- **Modern Robotics: Mechanics, Planning, and Control** (2017)  
+  Kevin M. Lynch and Frank C. Park  
+  Sách giáo khoa toàn diện về cơ sở của robot cổ điển, bao gồm động học, động lực học và điều khiển. Đọc chủ yếu để hiểu các phương pháp truyền thống được thảo luận trong đơn vị này.  
+  [Book Website](http://hades.mech.northwestern.edu/index.php/Modern_Robotics)
+
+- **Springer Handbook of Robotics** (2016)  
+  Edited by Bruno Siciliano and Oussama Khatib  
+  Một tài liệu tham khảo có thẩm quyền bao gồm mọi khía cạnh của robot, từ lý thuyết điều khiển cổ điển đến các phương pháp tiếp cận dựa trên phương pháp học tập mới nổi.
+  [DOI:10.1007/978-3-319-32552-1](https://doi.org/10.1007/978-3-319-32552-1)
+

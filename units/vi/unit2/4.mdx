@@ -1,0 +1,157 @@
+# Hệ Thống Điều Khiển và Giới Hạn của Chúng
+
+Trong phần này, chúng ta chuyển từ động học sang điều khiển. Đầu tiên ta sẽ trình bày cách lập luận với vận tốc (động học ngược vi phân, diff-IK), sau đó đóng vòng lặp với phản hồi, và cuối cùng tổng kết những điểm mà các quy trình cổ điển gặp khó khăn trong thực tế.
+
+## Động Học Vi Phân: Cách Tiếp Cận Thông Minh Hơn
+
+Thay vì giải trực tiếp vị trí khớp, ta có thể làm việc với **vận tốc**:
+
+### Điểm Mấu Chốt
+Nếu biết mối quan hệ giữa vận tốc khớp và vận tốc đầu công tác, ta có thể điều khiển chuyển động mượt mà hơn:
+
+$$\dot{p} = J(q) \dot{q}$$
+
+Trong đó $J(q)$ là **ma trận Jacobian** - mối quan hệ giữa vận tốc khớp và vận tốc không gian tác vụ.
+
+<!-- TODO: Micro-diagram: small vector at q in configuration space mapped by J(q) to a small vector at p in task space. -->
+
+### Giải Pháp Động Học Ngược Vi Phân
+Cho vận tốc đầu công tác mong muốn $\dot{p}^*$, tìm vận tốc khớp:
+
+$$\dot{q} = J(q)^+ \dot{p}^*$$
+
+Trong đó $J(q)^+$ là **giả nghịch đảo** của Jacobian.
+
+## Thêm Điều Khiển Phản Hồi
+
+Theo dõi vòng hở dễ gãy dưới lỗi mô hình và nhiễu loạn. Ta đóng vòng lặp bằng cách phản hồi sai số theo dõi.
+
+<img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-planar-manipulator-floor-box.png" alt="Moving Obstacle" style="width: 100%;" />
+
+*Xử lý chướng ngại vật di chuyển đòi hỏi điều khiển phản hồi.*
+
+Môi trường thực tế **năng động và không chắc chắn**. Ta cần phản hồi để xử lý:
+- **Lỗi mô hình** - Phương trình không hoàn hảo
+- **Nhiễu loạn** - Lực hoặc chướng ngại vật bất ngờ  
+- **Nhiễu cảm biến** - Đo lường có độ không chắc chắn
+
+### Giải Pháp Điều Khiển Phản Hồi
+
+Kết hợp chuyển động mong muốn với hiệu chỉnh sai số:
+
+$$\dot{q} = J(q)^+ (\dot{p}^* + k_p \Delta p)$$
+
+Trong đó $\Delta p = p^* - p(q)$ là sai số vị trí.
+
+
+> [!TIP]
+> Bắt đầu với $k_p$ nhỏ và tăng dần trong khi theo dõi dao động. Sử dụng watchdog (dừng an toàn) và bão hòa lệnh để giữ hệ thống trong giới hạn an toàn.
+
+## Tại Sao Cách Tiếp Cận Cổ Điển Gặp Khó Khăn
+
+Với lập luận vi phân và phản hồi, nhiều tác vụ theo dõi có thể giải được—trên lý thuyết. Trong thực tế, hệ thống vẫn gãy dưới độ phức tạp thực tế vì các lý do sau.
+
+
+<img src="https://huggingface.co/robotics-course/images/resolve/main/ch2/ch2-classical-limitations.png" alt="Classical Limitations" style="width: 90%;" />
+
+*Bốn giới hạn chính của cách tiếp cận robot dựa trên động lực học.*
+
+
+### 1. **Thách Thức Tích Hợp**
+Quy trình cổ điển được xây dựng từ **các mô-đun riêng biệt**:
+- Cảm biến → Ước lượng Trạng thái → Lập kế hoạch → Điều khiển → Tác động
+
+**Vấn đề:**
+- Lỗi tích lũy qua quy trình
+- Dễ gãy khi bất kỳ thành phần nào thất bại
+- Khó thích ứng với tác vụ hoặc robot mới
+
+### 2. **Khả Năng Mở Rộng Hạn Chế**  
+Phương pháp truyền thống gặp khó khăn với:
+- **Dữ liệu cảm biến chiều cao** (camera, LIDAR)
+- **Kịch bản đa tác vụ** (mỗi tác vụ cần lập kế hoạch tùy chỉnh)
+- **Tích hợp đa phương thức** (thị giác + xúc giác + bản thể cảm)
+
+### 3. **Giới Hạn Mô Hình Hóa**
+Vật lý thực tế phức tạp:
+- **Động học tiếp xúc** - Khó mô hình hóa chính xác
+- **Vật thể biến dạng** - Vượt quá giả định vật thể cứng
+- **Ma sát và độ đàn hồi** - Khó đặc trưng hóa
+
+### 4. **Bỏ Qua Xu Hướng Dữ Liệu**
+Phương pháp cổ điển không tận dụng:
+- **Bộ dữ liệu robot ngày càng tăng** - Hàng triệu minh họa có sẵn
+- **Học chéo robot** - Hiểu biết từ nền tảng khác
+- **Kiến thức cộng đồng** - Thu thập dữ liệu phi tập trung
+
+## Giải Pháp Học Máy Thay Thế
+
+Để giải quyết những giới hạn này, ta đối chiếu quy trình mô-đun cổ điển với chính sách học đầu-cuối.
+
+<hfoptions id="robotics-approaches">
+<hfoption id="classical">
+
+**Cách Tiếp Cận Robot Cổ Điển:**
+
+```
+Nhận thức → Ước lượng Trạng thái → Lập kế hoạch → Điều khiển → Tác động
+```
+
+**Thách thức:**
+- Mỗi mô-đun cần điều chỉnh chuyên gia
+- Lỗi tích lũy qua quy trình  
+- Khó thích ứng với tác vụ/robot mới
+- Đòi hỏi mô hình thế giới chính xác
+
+</hfoption>
+<hfoption id="learning">
+
+**Cách Tiếp Cận Dựa Trên Học Máy:**
+
+```
+Cảm biến Thô → Mạng Nơ-ron → Hành động
+```
+
+**Lợi ích:**
+- Học từ dữ liệu - Sử dụng minh họa và kinh nghiệm
+- Huấn luyện đầu-cuối - Tối ưu toàn bộ quy trình cùng nhau  
+- Tổng quát hóa qua các nhiệm vụ - Chia sẻ kiến thức giữa các mục đích khác nhau
+- Thích ứng với các robot mới - Chuyển giao kiến thức qua các nền tảng khác nhau
+
+</hfoption>
+</hfoptions>
+
+Đây là lời hứa của **robot learning**!
+
+> [!TIP]
+> **Tận dụng ưu điểm của cả hai:** Robot learning hiện đại thường kết hợp những hiểu biết cổ điển với học máy. Ví dụ, ta có thể kết hợp học máy với các ràng buộc an toàn từ lý thuyết điều khiển.
+>
+> Pure learning (học thuần túy) so với pure classical (cổ điển thuần túy) là một sự phân đôi sai lầm - các phương pháp hybrid (lai) đã có những thành công.
+
+---
+
+## Những điểm chính
+
+- Ngành robotics cổ điển dựa vào các mô hình toán học rõ ràng và kiến thức chuyên gia
+- Động học thuận (Forward kinematics) thì đơn giản, nhưng chỉ khả thi trong các kịch bản khá đơn giản. Động học nghịch (Inverse kinematics) thì tổng quát hơn, nhưng có thể khó phát triển trong thực tế  
+- Động học vi phân (Differential kinematics) làm việc với vận tốc thay vì vị trí để kiểm soát tốt hơn
+- Các phương pháp cổ điển gặp khó khăn với sự tích hợp, khả năng mở rộng, độ chính xác của mô hình và việc sử dụng dữ liệu
+- Các phương pháp dựa trên học máy (learning-based methods) đưa ra giải pháp cho những hạn chế cơ bản này
+- Tương lai nằm ở các phương pháp lai (hybrid approaches) kết hợp những hiểu biết cổ điển với khả năng học
+
+> [!TIP]
+> Tiếp theo, chúng ta sẽ thấy các phương pháp dựa trên học máy (reinforcement learning - học tăng cường và imitation learning - học bắt chước) hấp thụ một phần sự phức tạp này bằng cách tối ưu hóa trực tiếp từ dữ liệu.
+
+## Tài liệu tham khảo
+
+Để xem danh sách đầy đủ các tài liệu tham khảo, hãy xem [hướng dẫn](https://huggingface.co/spaces/lerobot/robot-learning-tutorial).
+
+- **Feedback Systems: An Introduction for Scientists and Engineers** (2008)  
+  Karl Johan Åström and Richard M. Murray  
+  Một giới thiệu toàn diện về hệ thống điều khiển phản hồi, bao gồm các nguyên tắc cơ bản nằm ở đóng vòng lặp điều khiển trong robot.  
+  [Book Website](http://www.cds.caltech.edu/~murray/amwiki/index.php/Main_Page)
+
+- **Real-Time Obstacle Avoidance for Manipulators and Mobile Robots** (1986)  
+  Oussama Khatib  
+  Một bài báo quan trọng giới thiệu phương pháp trường tiềm ẩn nhân tạo cho tránh chướng ngại vật, minh chứng cách phản hồi có thể được sử dụng cho điều khiển phản ứng trong môi trường động.  
+  [DOI:10.1177/027836498600500106](https://doi.org/10.1177/027836498600500106)

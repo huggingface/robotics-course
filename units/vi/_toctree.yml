@@ -1,0 +1,30 @@
+- title: "0. Chào mừng đến với Khóa học Robotics"
+  sections:
+  - local: unit0/1
+    title: Chào mừng đến với Khóa học Robotics
+  - local: unit0/2
+    title: Bắt đầu với LeRobot
+
+- title: "1. Giới thiệu Khóa học"
+  sections:
+  - local: unit1/1
+    title: Giới thiệu về Robot Learning
+  - local: unit1/2
+    title: LeRobot - Thư viện Mã nguồn Mở
+  - local: unit1/3
+    title: LeRobotDataset
+  - local: unit1/4
+    title: "Ví dụ mã: Batching một Bộ dữ liệu (Streaming)"
+
+- title: "2. Robotics Cổ điển"
+  sections:
+  - local: unit2/1
+    title: Giới thiệu về Robotics Cổ điển
+  - local: unit2/2
+    title: Các loại chuyển động của Robot
+  - local: unit2/3
+    title: Động học Robot
+  - local: unit2/4
+    title: Hệ thống Điều khiển và các Hạn chế
+  - local: unit2/5
+    title: Từ Robotics Cổ điển đến Robotics dựa trên Học máy

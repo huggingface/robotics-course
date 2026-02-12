@@ -3,6 +3,8 @@
 
 # Welcome to the 🤗 Robotics Course
 
+**Language / Ngôn ngữ:** [English](README.md) | [Tiếng Việt](README-vi.md)
+
 ## [🪧 Join the course on the Hub](https://huggingface.co/robotics-course)
 
 This free course will take you on a journey, **from classical robotics to modern learning-based approaches**, in understanding, implementing, and applying machine learning techniques to real robotic systems.

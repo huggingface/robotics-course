@@ -31,7 +31,7 @@ Think of it as two layers: a compact on‑disk layout for speed and scale, and a
 Datasets are always organized into three main components:
 
 - **Tabular Data**: Low-dimensional, high-frequency data such as joint states, and actions are stored in efficient memory-mapped files, and typically offloaded to the more mature `datasets` library by Hugging Face, providing fast with limited memory consumption.
-- **Visual Data**: To handle large volumes of camera data, frames are concatenated and encoded into MP4 files. Frames from the same episode are always grouped together into the same video, and multiple videos are grouped together by camera. To reduce stress on the file system, groups of videos for the same camera view are also broke into multiple sub-directories.
+- **Visual Data**: To handle large volumes of camera data, frames are concatenated and encoded into MP4 files. Frames from the same episode are always grouped together into the same video, and multiple videos are grouped together by camera. To reduce stress on the file system, groups of videos for the same camera view are also broken into multiple sub-directories.
 - **Metadata**: A collection of JSON files which describes the dataset's structure in terms of its metadata, serving as the relational counterpart to both the tabular and visual dimensions of data. Metadata include the different feature schema, frame rates, normalization statistics, and episode boundaries.
 
 As you browse a dataset on disk, keep these three buckets in mind—they explain almost everything you’ll see.

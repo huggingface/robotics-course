@@ -1,0 +1,350 @@
+# Từ Robot Cổ Điển đến Robot Học Máy
+
+Chương này kết nối các công cụ cổ điển bạn đã học với động lực cho các phương pháp học máy, sau đó chỉ dẫn bạn đến nội dung tiếp theo. Chúng ta sẽ giữ nội dung súc tích và thêm các chỉ dẫn để bạn biết nên tập trung vào đâu.
+
+> [!TIP]
+> Đừng lo nếu trang này hơi dày đặc, chúng ta sẽ phân tích kỹ hơn trong các chương tiếp theo.
+
+## Những gì chúng ta đã học
+
+Đầu tiên, hãy điểm lại nhanh các khái niệm quan trọng đã đề cập trong các chương nền tảng.
+
+<!-- TODO: Biểu đồ dòng thời gian nhỏ với các mốc: Cổ điển → Động học → Điều khiển → Giới hạn → Động lực học máy -->
+
+**Động lực cho Robot Học Máy:** Bạn đã khám phá sự thay đổi cơ bản đang diễn ra trong robot hiện nay, chuyển từ các phương pháp cổ điển dựa trên mô hình sang các phương pháp học dựa trên dữ liệu. Chúng ta đã thiết lập lý do tại sao robot học đang trở nên thiết yếu để tạo ra các hệ thống robot có khả năng tổng quát hóa tốt hơn, và cách các công cụ như LeRobot giúp những kỹ thuật tiên tiến này dễ tiếp cận hơn với cộng đồng nghiên cứu và thực hành rộng lớn hơn.
+
+**Hệ sinh thái LeRobot:** Bạn đã hiểu cơ bản về cách tiếp cận robot của LeRobot. Điều này bao gồm hiểu tầm nhìn đằng sau LeRobot như một thư viện robot end-to-end, hướng tới việc tích hợp các khía cạnh khác nhau của robot. Bạn cũng đã học về định dạng LeRobotDataset, xử lý sự phức tạp của dữ liệu robot đa phương thức, và có kinh nghiệm thực tế với việc tải và xử lý các bộ dữ liệu robot thực cho các ứng dụng học máy.
+
+Tiếp theo, bạn sẽ học cách tổng hợp các hành vi điều khiển tự động trực tiếp từ dữ liệu, và triển khai chúng trên robot thực tế bằng lerobot.
+
+**Nền tảng Robot Cổ điển:** Chúng ta đã xem xét chi tiết các phương pháp tiếp cận truyền thống trong robot, bao gồm các loại chuyển động robot khác nhau như thao tác, di chuyển và thao tác di động. Bạn đã học về động học thuận và động học ngược, động học vi phân và hệ thống điều khiển phản hồi. Quan trọng nhất, bạn đã phát triển sự hiểu biết về lý do tại sao các phương pháp cổ điển, bất chấp sự chặt chẽ toán học của chúng, lại gặp khó khăn với sự phức tạp và biến đổi của các ứng dụng robot thực tế.
+
+## Cuộc Cách mạng Học Máy
+
+Thông qua khám phá về robot cổ điển, bạn đã hiểu rõ tại sao các phương pháp dựa trên học máy đại diện cho một bước tiến quan trọng trong lĩnh vực này.
+
+**Các phương pháp cổ điển đối mặt với những hạn chế cơ bản** trở nên rõ ràng khi xử lý sự phức tạp của thế giới thực. Những phương pháp này yêu cầu mô hình hóa toán học mở rộng cho mọi khía cạnh của môi trường và tương tác của robot, điều này trở nên quá khó khăn cho các kịch bản phức tạp.
+
+Chúng gặp khó khăn trong việc tích hợp các nguồn dữ liệu đa phương thức như thị giác, xúc giác và cảm giác bản thể một cách thống nhất. Có lẽ quan trọng nhất, các phương pháp cổ điển không mở rộng tốt trên các tác vụ hoặc hiện thực robot khác nhau—mỗi ứng dụng mới thường yêu cầu kiến thức chuyên môn và thiết kế lại đáng kể.
+
+**Các phương pháp dựa trên học máy mang lại lợi thế thuyết phục** giải quyết trực tiếp những hạn chế này. Thay vì yêu cầu chuyên gia mô hình hóa mọi khía cạnh của vấn đề, các phương pháp này có thể học các hành vi và biểu diễn phù hợp trực tiếp từ dữ liệu.
+
+Chúng tự nhiên xử lý các đầu vào đa phương thức, đa chiều thông qua kiến trúc mạng nơ-ron được thiết kế cho sự phức tạp như vậy, có thể tổng quát hóa qua các nhiệm vụ và thể hiện khác nhau, và mở rộng khi có nhiều dữ liệu và tài nguyên tính toán hơn.
+
+<!-- TODO: graphic of pros and cons of classical and learning-based approaches -->
+
+## Nội Dung Tiếp Theo
+
+Kiến thức nền tảng bạn đã tích lũy sẽ chuẩn bị cho bạn tiếp cận các chủ đề nâng cao sắp tới.
+
+**Reinforcement Learning for Robotics (Học tăng cường cho Robot)** sẽ khám phá cách robot học các hành vi tối ưu thông qua tương tác thử-sai với môi trường. Bạn sẽ học cách thiết kế tín hiệu phần thưởng phù hợp cho nhiệm vụ robot, hiểu các phương pháp học tăng cường giúp robot cải thiện hiệu suất theo thời gian, và giải quyết thách thức quan trọng về hiệu quả mẫu—học hiệu quả với dữ liệu tương tác thực tế hạn chế. Chúng ta cũng sẽ tìm hiểu cách LeRobot triển khai các thuật toán học tăng cường này trong thực tế.
+
+**Imitation Learning via Behavioral Cloning (Học bắt chước qua Nhân bản Hành vi)** sẽ minh họa cách robot tiếp thu kỹ năng phức tạp bằng cách quan sát và sao chép trình diễn của chuyên gia. Phương pháp này đặc biệt giá trị vì cho phép robot học từ chuyên môn con người trong thế giới thực mà không cần thiết kế phần thưởng rõ ràng, tránh được những khó khăn khi áp dụng RL trong thực tế. Bạn sẽ hiểu cách xử lý vấn đề dịch chuyển phân phối khi robot gặp tình huống không có trong dữ liệu huấn luyện, khám phá kỹ thuật học bắt chước nâng cao vượt xa nhân bản hành vi đơn thuần, và tích lũy kinh nghiệm thực hành triển khai các phương pháp này bằng công cụ LeRobot.
+
+**Foundation Models for Robotics (Mô hình Nền tảng cho Robot)** sẽ bao gồm các phát triển tiên phong tạo ra hệ thống robot tổng quát và mạnh mẽ hơn. Bạn sẽ khám phá cách học đa nhiệm cho phép chia sẻ kiến thức giữa các nền tảng và nhiệm vụ robot khác nhau, hiểu chính sách điều kiện ngôn ngữ giúp robot tuân theo hướng dẫn ngôn ngữ tự nhiên, và tìm hiểu định luật mở rộng chi phối cách hiệu suất cải thiện với mô hình và bộ dữ liệu lớn hơn. Phần này sẽ trang bị cho bạn kiến thức để hiểu và đóng góp vào sự phát triển của các hệ thống robot thực sự tổng quát.
+
+## Kỹ Năng Thực Hành Đạt Được
+
+Thông qua phần nền tảng của khóa học, bạn đã phát triển cả năng lực kỹ thuật và hiểu biết khái niệm làm nền tảng cho các chủ đề nâng cao.
+
+**Kỹ Năng Kỹ Thuật:** Giờ đây bạn hiểu dữ liệu robot khác biệt thế nào so với bộ dữ liệu học máy truyền thống và tại sao cần định dạng chuyên biệt. Bạn đã có kinh nghiệm thực tế làm việc với API LeRobotDataset, bao gồm tải và xử lý dữ liệu robot đa phương thức kết hợp thị giác, cảm giác bản thể và thông tin hành động. Bạn cũng đã học về truyền phát bộ dữ liệu lớn hiệu quả—yếu tố quan trọng khi làm việc với các tập dữ liệu khổng lồ cung cấp năng lượng cho hệ thống học robot hiện đại.
+
+**Hiểu Biết Khái Niệm:** Quan trọng nhất, bạn đã hình thành mô hình tinh thần rõ ràng về sự tiến hóa đang diễn ra trong ngành robot ngày nay. Bạn hiểu bối cảnh lịch sử của phương pháp cổ điển, nền tảng toán học và những hạn chế cơ bản khi áp dụng vào kịch bản thực tế phức tạp. Bạn đã thấu hiểu cách tiếp cận dựa trên học máy giải quyết những hạn chế này và tại sao sự sẵn có của dữ liệu robot quy mô lớn đang thay đổi khả năng trong lĩnh vực này.
+
+## Sẵn Sàng Cho Thử Thách Tiếp Theo?
+
+> [!WARNING]
+> **Bạn đã sẵn sàng cho học robot nâng cao!** Các khái niệm bạn đã học về xử lý dữ liệu, xử lý đa phương thức và hạn chế của phương pháp cổ điển sẽ rất cần thiết khi chúng ta đi sâu vào:
+>
+> - **Học Tăng Cường** - Cách robot học hành vi tối ưu qua thử-sai
+> - **Học Bắt Chước** - Cách robot học bằng cách xem trình diễn của con người  
+> - **Mô hình Nền tảng** - Cách mô hình quy mô lớn tạo ra trí tuệ robot đa năng
+>
+> **Sắp ra mắt:** Các chương nâng cao này sẽ xây dựng trực tiếp trên nền tảng bạn vừa nắm vững.
+
+## Tóm Tắt Khóa Học
+- Học robot đại diện cho sự thay đổi mô hình từ phương pháp dựa trên mô hình sang hướng dữ liệu
+- LeRobot dân chủ hóa tiếp cận kỹ thuật học robot tiên tiến
+- Robot cổ điển cung cấp nền tảng quan trọng nhưng có hạn chế cơ bản về khả năng mở rộng
+- Phương pháp dựa trên học máy có thể tổng quát hóa qua nhiệm vụ, robot và môi trường
+- Tương lai nằm ở việc kết hợp hiểu biết cổ điển với khả năng học máy
+- Bộ dữ liệu quy mô lớn và mô hình nền tảng đang thay đổi khả năng trong ngành robot
+
+## Cộng Đồng và Tài Nguyên
+
+Khi bạn tiếp tục hành trình học robot:
+
+**Tiếp Tục Học:**
+- [Khám phá tài liệu LeRobot](https://huggingface.co/docs/lerobot)
+- [Thử ví dụ LeRobot](https://github.com/huggingface/lerobot)
+- [Đọc hướng dẫn chi tiết của chúng ta](https://huggingface.co/spaces/lerobot/robot-learning-tutorial)
+- [Tham gia thảo luận cộng đồng](https://huggingface.co/lerobot)
+
+**Tham Gia:**
+- Đóng góp bộ dữ liệu cho cộng đồng
+- Chia sẻ thử nghiệm học robot của bạn
+- Giúp cải thiện công cụ và tài liệu LeRobot
+
+> [!TIP]
+> Nếu bạn đang chọn dự án đầu tiên, hãy bắt đầu với nhiệm vụ học bắt chước nhỏ sử dụng LeRobotDataset (pick-and-place trên SO-100/SO-101). Bạn sẽ có trải nghiệm end-to-end—dữ liệu, mô hình, đánh giá—mà không cần thiết kế phần thưởng hay trình mô phỏng.
+
+**Chúc mừng bạn đã hoàn thành các chương nền tảng!** Giờ bạn đã sẵn sàng khám phá thế giới thú vị của các thuật toán robot dựa trên học máy.
+
+## Tài liệu tham khảo
+
+Để xem danh sách đầy đủ tài liệu tham khảo, hãy kiểm tra [hướng dẫn](https://huggingface.co/spaces/lerobot/robot-learning-tutorial).
+
+- **End-to-End Training of Deep Visuomotor Policies** (2016)  
+  Sergey Levine et al.  
+  Bài báo đột phá chứng minh cách học sâu có thể dùng cho điều khiển thị giác-vận động trực tiếp, bỏ qua các mô-đun nhận thức và lập kế hoạch truyền thống. Đây là bước tiến quan trọng trong chuyển đổi từ robot cổ điển sang robot dựa trên học máy.  
+  [arXiv:1504.00702](https://huggingface.co/papers/1504.00702)
+
+- **Learning Dexterous In-Hand Manipulation** (2018)  
+  OpenAI et al.  
+  Nghiên cứu này minh họa cách học tăng cường với domain randomization giải quyết các tác vụ thao tác phức tạp vốn rất khó lập trình bằng phương pháp cổ điển, nổi bật ưu điểm của cách tiếp cận dựa trên học máy.  
+  [arXiv:1808.00177](https://huggingface.co/papers/1808.00177)
+
+## Câu hỏi cuối chương
+
+Kiểm tra hiểu biết của bạn về chương Robot Cổ điển. Chọn câu trả lời đúng nhất cho mỗi câu hỏi.
+
+### 1. Tập hợp nào phân loại tốt nhất các dạng chuyển động robot được thảo luận?
+
+<Question
+	choices={[
+		{
+			text: "Navigation, mapping, and planning",
+			explain: "Đây là các chức năng pipeline, không phải loại chuyển động."
+		},
+		{
+			text: "Manipulation, locomotion, and mobile manipulation",
+			explain: "Đây là ba loại chuyển động được mô tả trong chương và phần latex.",
+	            correct: true
+		},
+		{
+			text: "Simulation, perception, and control",
+			explain: "Đây là môi trường hoặc thành phần pipeline, không phải loại chuyển động."
+		},
+	        {
+			text: "End-effector, joints, and sensors",
+			explain: "Đây là các thành phần, không phải loại chuyển động."
+		}
+	]}
+/>
+
+### 2. Khác biệt cốt lõi giữa động học thuận (FK) và động học nghịch (IK) là gì?
+
+<Question
+	choices={[
+		{
+			text: "FK ánh xạ góc khớp tới vị trí end-effector, trong khi IK ánh xạ vị trí mong muốn tới góc khớp",
+			explain: "Khớp với định nghĩa FK và IK trong chương và latex.",
+	            correct: true
+		},
+		{
+			text: "FK về vận tốc còn IK về vị trí",
+			explain: "Vận tốc được xử lý trong động học vi phân; FK/IK ánh xạ giữa không gian cấu hình và tác vụ."
+		},
+		{
+			text: "FK chỉ dành cho robot 2-DoF",
+			explain: "FK/IK áp dụng cho robot với DoF bất kỳ."
+		},
+	        {
+			text: "IK luôn tính toán nhanh hơn FK",
+			explain: "IK thường khó hơn; FK thường đơn giản."
+		}
+	]}
+/>
+
+### 3. Trong động học vi phân, Jacobian J(q) đại diện cho điều gì?
+
+<Question
+	choices={[
+		{
+			text: "Ánh xạ từ vận tốc khớp tới vận tốc end-effector",
+			explain: "ṗ = J(q) q̇ là quan hệ cơ bản (latex Mục 02).",
+	            correct: true
+		},
+		{
+			text: "Ánh xạ từ vị trí end-effector tới mô-men khớp",
+			explain: "Điều này liên quan động lực học, không phải Jacobian động học."
+		},
+		{
+			text: "Không gian làm việc khả thi của robot",
+			explain: "Không gian làm việc phụ thuộc độ dài liên kết và giới hạn, không chỉ J(q)."
+		},
+	        {
+			text: "Bộ lập kế hoạch chuyển động tránh vật cản",
+			explain: "Lập kế hoạch là mô-đun riêng biệt."
+		}
+	]}
+/>
+
+### 4. Giải pháp IK vi phân dạng đóng sử dụng J(q)^+. Ký hiệu '+' biểu thị gì?
+
+<Question
+	choices={[
+		{
+			text: "Nghịch đảo Moore–Penrose",
+			explain: "Được nêu rõ trong chương và latex.",
+	            correct: true
+		},
+		{
+			text: "Chuyển vị của Jacobian",
+			explain: "J^T không phải ký hiệu '+'."
+		},
+		{
+			text: "Định thức của Jacobian",
+			explain: "Định thức là vô hướng; '+' chỉ nghịch đảo giả."
+		},
+	        {
+			text: "Ma trận phụ hợp của Jacobian",
+			explain: "Không dùng ở đây."
+		}
+	]}
+/>
+
+
+### 5. Trong luật phản hồi tỷ lệ \(\dot q = J^+(\dot p^* + k_p \Delta p)\), \(\Delta p\) là gì?
+
+<Question
+	choices={[
+		{
+			text: "Lỗi vị trí: vị trí mong muốn trừ đi vị trí đo được, \(p^* - p(q)\)",
+			explain: "Khớp với định nghĩa trong chương và LaTeX Mục 02.",
+	            correct: true
+		},
+		{
+			text: "Lỗi khớp: cấu hình mong muốn trừ đi cấu hình đo được",
+			explain: "Phương trình sử dụng lỗi không gian tác vụ, không phải lỗi không gian khớp."
+		},
+		{
+			text: "Một số hạng bù ma sát",
+			explain: "Ma sát không được mô hình hóa trong bộ điều khiển động học này."
+		},
+	        {
+			text: "Hệ số giảm chấn cho giả nghịch đảo",
+			explain: "Giảm chấn là một sửa đổi riêng biệt, không phải \nabla p."
+		}
+	]}
+/>
+
+### 6. Chướng ngại vật và giới hạn khớp ảnh hưởng thế nào đến bài toán nghịch đảo động học (IK) trong ví dụ tay máy phẳng?
+
+<Question
+	choices={[
+		{
+			text: "Chúng hạn chế tập cấu hình khả thi và làm bài toán IK khó hơn",
+			explain: "LaTeX Mục 02 cho thấy các ràng buộc thu hẹp \nmathcal{Q} và làm phức tạp hóa bài toán IK.",
+	            correct: true
+		},
+		{
+			text: "Chúng không ảnh hưởng đến nghiệm IK",
+			explain: "Điều này mâu thuẫn với thảo luận về ràng buộc."
+		},
+		{
+			text: "Chúng chỉ thay đổi ánh xạ thuận (FK)",
+			explain: "Công thức FK giữ nguyên; tính khả thi thay đổi."
+		},
+	        {
+			text: "Chúng đảm bảo một nghiệm IK duy nhất",
+			explain: "Ràng buộc có thể loại bỏ nghiệm hoặc để lại nhiều nghiệm."
+		}
+	]}
+/>
+
+### 7. Phát biểu nào đặc trưng tốt nhất cho các quy trình robot cổ điển như được trình bày trong chương này?
+
+<Question
+	choices={[
+		{
+			text: "Chúng là các mô-đun xếp chồng với giao diện cố định (nhận thức, ước lượng trạng thái, lập kế hoạch, điều khiển)",
+			explain: "Khớp với quy trình mô-đun được mô tả trong LaTeX Mục 02.",
+	            correct: true
+		},
+		{
+			text: "Chúng là các chính sách học đầu-cuối đơn lẻ",
+			explain: "Điều đó mô tả các phương pháp dựa trên học máy, không phải cổ điển."
+		},
+		{
+			text: "Chúng không cần điều chỉnh chuyên gia",
+			explain: "Điều chỉnh chuyên gia là một hạn chế đã biết của các quy trình cổ điển."
+		},
+	        {
+			text: "Chúng tích hợp sẵn các đầu vào đa chiều thô",
+			explain: "Tích hợp các đầu vào đa chiều là một thách thức đối với các phương pháp cổ điển."
+		}
+	]}
+/>
+
+### 8. Tập hợp nào liệt kê các hạn chế cốt lõi được nêu bật cho các phương pháp dựa trên động lực học?
+
+<Question
+	choices={[
+		{
+			text: "Thách thức tích hợp, khả năng mở rộng hạn chế, hạn chế mô hình hóa và bỏ qua các xu hướng dữ liệu",
+			explain: "Đây chính xác là tập hợp được nhấn mạnh trong chương và hình LaTeX.",
+	            correct: true
+		},
+		{
+			text: "Chi phí, độ chính xác, tốc độ và tiêu thụ năng lượng",
+			explain: "Không phải bốn hạn chế cốt lõi được thảo luận ở đây."
+		},
+		{
+			text: "Độ tin cậy phần cứng, giấy phép phần mềm và tiêu chuẩn an toàn",
+			explain: "Chủ đề quan trọng nhưng không phải là bốn hạn chế được trích dẫn."
+		},
+	        {
+			text: "Tính tối ưu của bộ lập kế hoạch, hiệu chuẩn cảm biến và hao mòn cơ cấu chấp hành",
+			explain: "Đây là các vấn đề kỹ thuật hẹp hơn, không phải tập hợp cốt lõi."
+		}
+	]}
+/>
+
+### 9. Lợi thế chính của các phương pháp dựa trên học máy được nhấn mạnh để tương phản với các phương pháp cổ điển là gì?
+
+<Question
+	choices={[
+		{
+			text: "Chúng có thể học đầu-cuối từ dữ liệu và khái quát hóa qua các tác vụ/thiết kế cơ thể",
+			explain: "Phù hợp với thảo luận trong LaTeX và chương về khái quát hóa và huấn luyện đầu-cuối.",
+	            correct: true
+		},
+		{
+			text: "Chúng loại bỏ nhu cầu về cảm biến",
+			explain: "Cảm biến vẫn cần thiết."
+		},
+		{
+			text: "Chúng không cần tài nguyên tính toán",
+			explain: "Quy mô tính toán và dữ liệu là trung tâm của học máy."
+		},
+	        {
+			text: "Chúng không cần bộ dữ liệu",
+			explain: "Các phương pháp học dựa vào dữ liệu."
+		}
+	]}
+/>
+
+### 10. Tại sao tính sẵn có của các bộ dữ liệu robot mở lại quan trọng trong ngữ cảnh của chương này?
+
+<Question
+	choices={[
+		{
+			text: "Nó cho phép các phương pháp dựa trên học máy mở rộng quy mô và chuyển giao kiến thức",
+			explain: "Phù hợp với thảo luận trong tài liệu về các xu hướng dữ liệu thúc đẩy việc học.",
+	            correct: true
+		},
+		{
+			text: "Nó làm giảm chi phí sản xuất của cánh tay robot",
+			explain: "Chi phí sản xuất tách biệt với tính sẵn có của bộ dữ liệu."
+		},
+		{
+			text: "Nó loại bỏ hoàn toàn nhu cầu về lý thuyết điều khiển",
+			explain: "Các hiểu biết về điều khiển vẫn quan trọng, ngay cả khi có học máy."
+		},
+	        {
+			text: "Nó đảm bảo khái quát hóa hoàn hảo",
+			explain: "Không có phương pháp nào đảm bảo khái quát hóa hoàn hảo."
+		}
+	]}
+/>

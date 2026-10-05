@@ -1,0 +1,71 @@
+# LeRobotDataset
+
+LeRobotDataset là một định dạng bộ dữ liệu chuẩn hóa được thiết kế để giải quyết các nhu cầu cụ thể của nghiên cứu học máy robot. Trong vài phút tới, bạn sẽ thấy các vấn đề nó giải quyết, cách nó được tổ chức và nơi cần xem đầu tiên khi tải dữ liệu.
+
+Định dạng này cung cấp quyền truy cập thống nhất, thuận tiện vào dữ liệu robot đa phương thức, bao gồm dữ liệu cảm biến-vận động, nhiều luồng camera và trạng thái điều khiển từ xa. LeRobotDataset cũng lưu trữ thông tin chung về dữ liệu được thu thập, bao gồm mô tả nhiệm vụ dạng văn bản, loại robot được sử dụng và các chi tiết đo lường như khung hình trên giây cho cả luồng hình ảnh và trạng thái robot, cùng với loại camera được sử dụng, độ phân giải và tốc độ khung hình.
+
+> [!TIP]
+> **Tại sao cần định dạng chuyên biệt?** Các bộ dữ liệu học máy truyền thống (như ImageNet) rất đơn giản: một hình ảnh, một nhãn. Dữ liệu robot phức tạp hơn nhiều:
+> - **Đa phương thức**: Hình ảnh + dữ liệu cảm biến + hành động, tất cả đồng bộ hóa
+> - **Thời gian**: Cả quan sát và hành động đều được ghi lại theo thời gian, theo trình tự tuần tự
+> - **Theo tập**: Dữ liệu được tổ chức thành các quỹ đạo/tập
+> - **Chiều cao**: Nhiều góc nhìn camera (tức nhiều hình ảnh), trạng thái khớp, lực, v.v.
+>
+> LeRobotDataset xử lý mọi độ phức tạp này một cách liền mạch!
+
+LeRobotDataset cung cấp giao diện thống nhất để xử lý dữ liệu đa phương thức theo chuỗi thời gian và tích hợp liền mạch với hệ sinh thái PyTorch và Hugging Face.
+
+Nó có thể mở rộng và tùy chỉnh, đồng thời đã hỗ trợ dữ liệu mở sẵn trên nhiều nền tảng khác nhau trong LeRobot, từ nền tảng thao tác như SO-100 và ALOHA-2 đến cánh tay người máy, bộ dữ liệu dựa trên mô phỏng và cả lái xe tự hành.
+
+Định dạng được xây dựng để hiệu quả cho huấn luyện và đủ linh hoạt để chứa các loại dữ liệu đa dạng, đồng thời thúc đẩy khả năng tái tạo và dễ sử dụng.
+
+<img src="https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/robotics-course/item-from-dataset.png" alt="Item from dataset">
+
+## Thiết kế Lớp Dataset
+
+Bạn có thể đọc thêm về các lựa chọn thiết kế đằng sau lớp dataset của chúng ta [tại đây](https://huggingface.co/blog/lerobot-datasets-v3).
+Một lựa chọn thiết kế cốt lõi của LeRobotDataset là tách biệt lưu trữ dữ liệu nền tảng khỏi giao diện người dùng. Điều này cho phép lưu trữ hiệu quả trong khi vẫn trình bày dữ liệu ở định dạng trực quan, sẵn sàng sử dụng.
+
+Hãy coi nó như hai lớp: bố cục trên đĩa gọn nhẹ để tối ưu tốc độ và quy mô, và giao diện Python sạch sẽ tạo ra tensor sẵn sàng huấn luyện.
+
+Các bộ dữ liệu luôn được tổ chức thành ba thành phần chính:
+
+- **Dữ liệu dạng bảng**: Dữ liệu tần số cao, chiều thấp như trạng thái khớp và hành động được lưu trong các tệp bộ nhớ ánh xạ hiệu quả, thường được chuyển sang thư viện `datasets` trưởng thành hơn của Hugging Face, cung cấp tốc độ cao với mức tiêu thụ bộ nhớ hạn chế.
+- **Dữ liệu hình ảnh**: Để xử lý khối lượng lớn dữ liệu camera, các khung hình được nối và mã hóa thành tệp MP4. Các khung hình từ cùng một tập luôn được nhóm chung vào một video, và nhiều video được nhóm theo camera. Để giảm tải cho hệ thống tệp, các nhóm video cho cùng một góc nhìn camera cũng được chia thành nhiều thư mục con.
+- **Metadata**: Một tập hợp các tệp JSON mô tả cấu trúc bộ dữ liệu về mặt metadata, đóng vai trò tương quan với cả chiều dữ liệu dạng bảng và hình ảnh. Metadata bao gồm các lược đồ tính năng khác nhau, tốc độ khung hình, thống kê chuẩn hóa và ranh giới tập.
+
+Khi bạn duyệt một bộ dữ liệu trên đĩa, hãy ghi nhớ ba nhóm này - chúng giải thích hầu hết mọi thứ bạn sẽ thấy.
+
+Để mở rộng quy mô và hỗ trợ các bộ dữ liệu có hàng triệu quỹ đạo (dẫn đến hàng trăm triệu hoặc tỷ khung hình camera riêng lẻ), chúng ta hợp nhất dữ liệu từ các tập khác nhau vào cùng một cấu trúc cấp cao.
+
+Cụ thể, một tệp dữ liệu duy nhất (lưu bằng tệp parquet) hoặc bản ghi (lưu ở định dạng MP4) thường chứa nhiều tập. Điều này giới hạn số lượng tệp và tăng tốc I/O. Sự đánh đổi là metadata trở thành "bản đồ" cho biết mỗi tập bắt đầu và kết thúc ở đâu. Đến lượt nó, metadata có chức năng "tương quan" hơn nhiều, tương tự như cách trong cơ sở dữ liệu quan hệ, các khóa chung cho phép truy xuất thông tin từ nhiều bảng.
+
+Cấu trúc ví dụ cho một LeRobotDataset sẽ xuất hiện như sau:
+
+- `meta/info.json`: Metadata này là tệp metadata trung tâm. Nó chứa lược đồ bộ dữ liệu đầy đủ, định nghĩa mọi tính năng (ví dụ: `observation.state`, `action`), hình dạng và kiểu dữ liệu của chúng. Nó cũng lưu thông tin quan trọng như khung hình trên giây (`fps`) của bộ dữ liệu, phiên bản LeRobot tại thời điểm thu thập và mẫu đường dẫn dùng để định vị tệp dữ liệu và video.
+- `meta/stats.json`: Tệp này lưu thống kê tổng hợp (trung bình, std, min, max) cho mỗi tính năng trên toàn bộ bộ dữ liệu, được sử dụng để chuẩn hóa dữ liệu cho hầu hết các mô hình chính và có thể truy cập từ bên ngoài thông qua `dataset.meta.stats`.
+- `meta/tasks.jsonl`: Tệp này chứa bản định nghĩa từ ngữ tự nhiên đến chỉ số nhiệm vụ tương ứng, được sử dụng cho huấn luyện chính quyền dựa trên nhiệm vụ.
+- `meta/episodes/*`: Thư mục này chứa metadata về mỗi tập riêng lẻ, chẳng hạn như độ dài, nhiệm vụ tương ứng và con trỏ đến nơi dữ liệu của nó được lưu trữ trong các tệp của bộ dữ liệu. Để mở rộng quy mô, thông tin này được lưu trữ trong các tệp thay vì một tệp JSON lớn.
+- `data/*`: Chứa dữ liệu nhật ký dạng bảng cơ bản, sử dụng tệp parquet để cho phép truy cập nhanh chóng, ánh xạ bộ nhớ. Để cải thiện hiệu suất và xử lý bộ dữ liệu lớn, dữ liệu từ nhiều tập được nối vào các tệp lớn hơn. Các tệp này được tổ chức thành các thư mục con theo chủ đề để giữ cho kích thước thư mục quản lý được. Một tệp duy nhất thường chứa dữ liệu cho nhiều tập riêng lẻ.
+- `videos/*`: Chứa các tệp video MP4 cho tất cả các luồng quan sát hình ảnh. Tương tự như thư mục `data/`, video từ nhiều tập được nối vào các tệp MP4 duy nhất. Chiến lược này giảm số lượng tệp trong bộ dữ liệu, hiệu quả hơn cho hệ thống tệp hiện đại.
+
+Hướng dẫn đọc: bắt đầu với `meta/info.json` để hiểu lược đồ và fps; sau đó kiểm tra `meta/stats.json` để chuẩn hóa; cuối cùng, xem một tệp trong `data/` và `videos/` để nối các dấu chấm.
+
+> [!TIP]
+> **Hiệu suất lưu trữ:** Bằng cách nối các tập vào các tệp lớn hơn, LeRobotDataset tránh vấn đề "small files problem" có thể làm chậm hệ thống tệp. Một bộ dữ liệu với 1 triệu tập có thể chỉ có vài trăm tệp thực tế trên đĩa!
+>
+> **Mẹo thực hành:** Các tệp metadata hoạt động như một chỉ mục cơ sở dữ liệu, cho phép truy cập nhanh chóng đến các tập riêng lẻ mà không cần tải toàn bộ tệp video.
+
+## Tham khảo
+
+Để xem danh sách đầy đủ các tham khảo, hãy xem [hướng dẫn](https://huggingface.co/spaces/lerobot/robot-learning-tutorial).
+
+- **Implicit Behavioral Cloning** (2022)  
+  Pete Florence et al.  
+  Bài báo này giới thiệu mô hình dựa trên năng lượng cho việc học hành vi, chứng minh cách mô hình ẩn không gian hành động nhiều hơn mô hình rõ ràng—một yếu tố quan trọng khi thiết kế định dạng dữ liệu cho học máy robot.  
+  [Paper (CoRL 2022)](https://proceedings.mlr.press/v164/florence22a.html)
+
+- **A Dataset for Interactive Vision-Language Navigation with Unknown Command Feasibility** (2022)  
+  Various Authors  
+  Bài báo này giới thiệu một ví dụ về cách định dạng dữ liệu đặc biệt cho phép khả năng mới trong học máy robot, đặc biệt là việc xử lý dữ liệu đa phương thức và cấu trúc tập theo chuỗi thời gian.  
+  [arXiv:2202.02312](https://huggingface.co/papers/2202.02312)

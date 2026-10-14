@@ -16,7 +16,7 @@ Most problems fall into one of three categories:
 
 **Mobile Manipulation** combines both capabilities, creating systems that can both move through their environment and manipulate objects. These problems are more complex because they need to coordinate many more control variables than either locomotion or manipulation alone.
 
-<!-- TODO: Diagram: three side-by-side boxes (Manipulation, Locomotion, Mobile Manipulation) with 1–2 examples each (e.g., pick-and-place; quadruped walking; mobile base with arm). Include typical observations (RGB, depth, proprioception) and action spaces (joint velocities vs base velocity). -->
+<img src="https://raw.githubusercontent.com/huggingface/robotics-course/main/units/en/unit2/diagrams/motion-taxonomy.svg" alt="Three kinds of robot motion side by side: manipulation (the world changes, arm joint targets plus gripper), locomotion (the robot moves, base velocity or leg joint targets) and mobile manipulation (both, coupled), all fed by the same sensing: cameras, proprioception, touch." style="width: 100%; max-width: 900px;" />
 
 > [!TIP]
 > Quick rule of thumb: ask "what changes most?" If mainly the world (object pose/state) changes, it's manipulation. If mainly the robot pose changes, it's locomotion. If both change in a tightly coupled way, it's mobile manipulation. Use this to decide sensors to log and the action space to predict.

@@ -54,7 +54,7 @@ In the vast majority of instances, robotics deals with producing motion via actu
 
 **Locomotion** encompasses motions that result in changes to the robot's physical location within its environment. This general category includes both *wheeled locomotion* (like mobile bases and autonomous vehicles) and *legged locomotion* (like walking robots and quadrupeds), depending on the mechanism the robot uses to move through its environment.
 
-<!-- TODO: Diagram: three boxes (Manipulation, Locomotion, Mobile Manipulation) with 1–2 concrete examples each; arrows showing shared sensing (vision/touch) but different action spaces. -->
+<img src="https://raw.githubusercontent.com/huggingface/robotics-course/main/units/en/unit2/diagrams/motion-taxonomy.svg" alt="Three kinds of robot motion side by side. Manipulation: the world changes while the robot stays put, for example SO-100 or ALOHA pick-and-place, with an action space of arm joint targets plus a gripper. Locomotion: the robot's own position changes, wheeled (mobile bases, cars) or legged (Spot, Atlas, Open Duck Mini), with an action space of base velocity or leg joint targets. Mobile manipulation: both change and are coupled, for example an arm on a mobile base or a humanoid doing chores, with base and arm controlled together. All three share the same sensing: cameras, proprioception, touch." style="width: 100%; max-width: 900px;" />
 
 > [!TIP]
 > Quick classifier: ask "what changes?" If mainly the world changes (object pose/state), you're in manipulation. If mainly the robot state changes, you're in locomotion. If both change meaningfully within the task, you're in mobile manipulation. This simple test helps when designing observations, actions, and evaluation.
@@ -120,7 +120,7 @@ $$\dot{q}(t) = \arg\min_\nu \|J(q(t)) \nu - \dot{p}^*(t)\|_2^2$$
 
 This often admits the closed-form solution $\dot{q} = J(q)^+ \dot{p}^*$, where $J^+(q)$ denotes the Moore-Penrose pseudo-inverse of $J(q)$.
 
-<!-- TODO: Micro-diagram: arrows from q -> J(q) -> p with small velocity vectors. -->
+<img src="https://raw.githubusercontent.com/huggingface/robotics-course/main/units/en/unit2/diagrams/jacobian-map.png" alt="Left: task space with the two-link arm at q = (30°, 60°), the requested hand velocity as a green arrow, the two columns of the Jacobian as blue and orange arrows at the hand, and the ellipse of hand velocities reachable with unit joint speed. Right: configuration space (θ₁, θ₂) with the current q as a dot and the joint-velocity vector q̇ = J(q)⁺ ṗ* as a green arrow; the rows θ₂ = 0 and θ₂ = ±180° are shaded red where det J vanishes." style="width: 100%; max-width: 900px;" />
 
 ### Adding Feedback Loops
 
@@ -134,7 +134,7 @@ To mitigate the effect of modeling errors, sensing noise and other disturbances,
 
 More advanced techniques for control consisting in feedback linearization, PID control, Linear Quadratic Regulator (LQR) or Model-Predictive Control (MPC) can be employed to stabilize tracking and reject moderate perturbations.
 
-<!-- TODO: Block diagram: desired trajectory → controller → robot → sensors → error → controller. -->
+<img src="https://raw.githubusercontent.com/huggingface/robotics-course/main/units/en/unit2/diagrams/feedback-loop.svg" alt="Block diagram of the closed loop: the desired trajectory p*(t), ṗ*(t) enters a summing junction, the measured hand position p(q) is subtracted to form the error Δp, the controller computes joint velocities q̇ = J(q)⁺(ṗ* + k_p Δp), the robot integrates them into joints q(t), and the sensors measure p = p(q) which feeds back to the junction." style="width: 100%; max-width: 900px;" />
 
 ## Limitations of Dynamics-based Robotics
 

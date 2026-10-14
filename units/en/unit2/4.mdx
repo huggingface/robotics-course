@@ -13,7 +13,7 @@ $$\dot{p} = J(q) \dot{q}$$
 
 Where $J(q)$ is the **Jacobian matrix** - the relationship between joint and task space velocities.
 
-<!-- TODO: Micro-diagram: small vector at q in configuration space mapped by J(q) to a small vector at p in task space. -->
+<img src="https://raw.githubusercontent.com/huggingface/robotics-course/main/units/en/unit2/diagrams/jacobian-map.png" alt="Left: task space with the arm at q = (30°, 60°), the requested hand velocity ṗ* as a green arrow at the hand, the two columns of J(q) as blue and orange arrows, and the ellipse of hand velocities reachable with unit joint speed. Right: configuration space (θ₁, θ₂) with q as a dot and the joint velocity q̇ = J(q)⁺ ṗ* as a green arrow; the singular rows where det J = 0 are shaded red." style="width: 100%; max-width: 900px;" />
 
 ### Differential IK Solution
 Given a desired end-effector velocity $\dot{p}^*$, find joint velocities:

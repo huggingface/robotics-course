@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 440" width="1180" height="440" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Roboto, Helvetica, Arial, sans-serif" font-size="16">
+  <title>Three kinds of robot motion: manipulation, locomotion, mobile manipulation, with shared sensing and different action spaces</title>
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#5f636c"/></marker>
+  </defs>
+  <rect width="1180" height="440" fill="#ffffff"/>
+  <text x="590" y="34" text-anchor="middle" font-size="18" font-weight="600" fill="#1b1d22">Ask "what changes?"</text>
+  <!-- shared sensing bar -->
+  <rect x="60" y="56" width="1060" height="46" rx="10" fill="#f0f3fa" stroke="#dddbd2"/>
+  <text x="590" y="85" text-anchor="middle" fill="#1b1d22">Shared sensing: cameras (RGB, depth) · proprioception (joint positions, IMU) · touch and force</text>
+  <line x1="240" y1="102" x2="240" y2="136" stroke="#5f636c" stroke-width="2" marker-end="url(#ah)"/>
+  <line x1="590" y1="102" x2="590" y2="136" stroke="#5f636c" stroke-width="2" marker-end="url(#ah)"/>
+  <line x1="940" y1="102" x2="940" y2="136" stroke="#5f636c" stroke-width="2" marker-end="url(#ah)"/>
+  <!-- manipulation -->
+  <rect x="60" y="140" width="360" height="250" rx="14" fill="#eef2fb" stroke="#2f6fdb" stroke-width="2"/>
+  <text x="240" y="176" text-anchor="middle" font-size="20" font-weight="700" fill="#2f6fdb">Manipulation</text>
+  <text x="240" y="202" text-anchor="middle" fill="#1b1d22">the world changes · the robot stays put</text>
+  <text x="84" y="240" fill="#5f636c" font-weight="600">examples</text>
+  <text x="84" y="264" fill="#1b1d22">SO-100 / SO-101 pick-and-place</text>
+  <text x="84" y="288" fill="#1b1d22">ALOHA bimanual folding, assembly, tool use</text>
+  <text x="84" y="330" fill="#5f636c" font-weight="600">action space</text>
+  <text x="84" y="354" fill="#1b1d22" font-family="ui-monospace, Menlo, monospace" font-size="15">arm joint targets + gripper</text>
+  <!-- locomotion -->
+  <rect x="410" y="140" width="360" height="250" rx="14" fill="#fff4ea" stroke="#e0751f" stroke-width="2"/>
+  <text x="590" y="176" text-anchor="middle" font-size="20" font-weight="700" fill="#e0751f">Locomotion</text>
+  <text x="590" y="202" text-anchor="middle" fill="#1b1d22">the robot's own position changes</text>
+  <text x="434" y="240" fill="#5f636c" font-weight="600">examples</text>
+  <text x="434" y="264" fill="#1b1d22">wheeled: mobile bases, autonomous cars</text>
+  <text x="434" y="288" fill="#1b1d22">legged: Spot, Atlas, Open Duck Mini</text>
+  <text x="434" y="330" fill="#5f636c" font-weight="600">action space</text>
+  <text x="434" y="354" fill="#1b1d22" font-family="ui-monospace, Menlo, monospace" font-size="15">base velocity, or leg joint targets</text>
+  <!-- mobile manipulation -->
+  <rect x="760" y="140" width="360" height="250" rx="14" fill="#eaf6f0" stroke="#16925b" stroke-width="2"/>
+  <text x="940" y="176" text-anchor="middle" font-size="20" font-weight="700" fill="#16925b">Mobile manipulation</text>
+  <text x="940" y="202" text-anchor="middle" fill="#1b1d22">both change, and they are coupled</text>
+  <text x="784" y="240" fill="#5f636c" font-weight="600">examples</text>
+  <text x="784" y="264" fill="#1b1d22">an arm on a mobile base fetching an object</text>
+  <text x="784" y="288" fill="#1b1d22">humanoids (NEO) doing household chores</text>
+  <text x="784" y="330" fill="#5f636c" font-weight="600">action space</text>
+  <text x="784" y="354" fill="#1b1d22" font-family="ui-monospace, Menlo, monospace" font-size="15">base + arm together, coupled</text>
+  <text x="590" y="424" text-anchor="middle" font-size="14" fill="#5f636c">The taxonomy decides what to log in a dataset (which sensors) and what a policy predicts (which action space).</text>
+</svg>

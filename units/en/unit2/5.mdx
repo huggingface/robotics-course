@@ -9,7 +9,7 @@ This chapter ties the classical tools you’ve learned to the motivations for le
 
 First, a quick recap of the important concepts covered across the foundational units.
 
-<!-- TODO: Small timeline diagram with milestones: Classical → Kinematics → Control → Limitations → Learning motivation. -->
+<img src="https://raw.githubusercontent.com/huggingface/robotics-course/main/units/en/unit2/diagrams/unit2-timeline.svg" alt="A timeline of Unit 2 in five steps. 1, Classical robotics (Units 2.1 and 2.2): explicit vs implicit models; manipulation, locomotion and mobile manipulation. 2, Kinematics (Unit 2.3): the SO-100 simplified to a two-link planar arm, forward kinematics q to p(q), inverse kinematics as minimising the distance between p(q) and p*. 3, Control (Unit 2.4): differential IK q̇ = J(q)⁺ ṗ* with feedback k_p Δp. These first three are the classical, model-based tools. 4, Limitations (Units 2.1 and 2.4), why they struggle: integration, scalability, modelling and overlooking data trends. 5, Learning motivation (Unit 2.5), what learning offers: learning end to end from data and generalizing across tasks and robot embodiments. Reinforcement learning, imitation learning and foundation models come next." style="width: 100%; max-width: 900px;" />
 
 **Motivation for Learning-Based Robotics:** You've explored the fundamental shift occurring in robotics today, moving from classical model-based approaches toward data-driven learning methods. We've established why robot learning is becoming essential for creating more capable and generalizable robotic systems, and how tools like LeRobot are making these advanced techniques accessible to a broader community of researchers and practitioners.
 
@@ -31,7 +31,7 @@ They struggle to integrate multi-modal data sources like vision, touch, and prop
 
 They naturally handle multi-modal, high-dimensional inputs through neural network architectures designed for such complexity, can generalize across different tasks and even different robot embodiments, and scale with the availability of data and computational resources.
 
-<!-- TODO: graphic of pros and cons of classical and learning-based approaches -->
+<img src="https://raw.githubusercontent.com/huggingface/robotics-course/main/units/en/unit2/diagrams/classical-vs-learning.svg" alt="Pros and cons of classical (model-based) and learning-based (data-driven) robotics. Three classical limitations, each paired with the learning advantage that addresses it: classical methods must model every aspect of the robot, its environment and their interactions, while learning acquires behaviours and representations directly from data; classical methods struggle to integrate vision, touch and proprioception in a unified way, while learning handles multi-modal, high-dimensional inputs with neural networks; with classical methods each new task or robot embodiment needs re-engineering and expert knowledge, while learning generalizes across tasks and embodiments and scales with data and compute. Below, what each side still brings and costs: classical methods offer mathematical rigor where the physics is well understood and the foundations learning builds on (FK/IK, Jacobians, feedback control); learning needs data and compute and gives no guarantee of perfect generalization, so control insights such as safety still matter. The future lies in combining both." style="width: 100%; max-width: 900px;" />
 
 ## What's Coming Next
 

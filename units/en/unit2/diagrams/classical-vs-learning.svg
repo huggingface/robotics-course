@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 664" width="1180" height="664" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Roboto, Helvetica, Arial, sans-serif" font-size="16">
+  <title>Pros and cons of classical (model-based) and learning-based robotics</title>
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#5f636c"/></marker>
+  </defs>
+  <rect width="1180" height="664" fill="#ffffff"/>
+  <text x="590" y="34" text-anchor="middle" font-size="18" font-weight="600" fill="#1b1d22">Classical vs learning-based robotics</text>
+  <!-- column headers -->
+  <rect x="40" y="56" width="460" height="56" rx="12" fill="#eef2fb" stroke="#2f6fdb" stroke-width="2"/>
+  <text x="270" y="91" text-anchor="middle" fill="#1b1d22"><tspan font-weight="700" font-size="20" fill="#2f6fdb">Classical</tspan><tspan fill="#1b1d22">  ·  model-based</tspan></text>
+  <rect x="680" y="56" width="460" height="56" rx="12" fill="#eaf6f0" stroke="#16925b" stroke-width="2"/>
+  <text x="910" y="91" text-anchor="middle" fill="#1b1d22"><tspan font-weight="700" font-size="20" fill="#16925b">Learning-based</tspan><tspan fill="#1b1d22">  ·  data-driven</tspan></text>
+  <text x="590" y="148" text-anchor="middle" font-size="15" font-weight="600" fill="#5f636c">where classical approaches struggle  →  how learning addresses it</text>
+  <rect x="40" y="164" width="460" height="70" rx="12" fill="#fcefef" stroke="#d23c3c" stroke-opacity="0.55" stroke-width="1.5"/>
+  <text x="62" y="194" fill="#1b1d22"><tspan font-weight="700" fill="#d23c3c">−</tspan><tspan x="80">must model every aspect of the robot, its</tspan></text>
+  <text x="80" y="217" fill="#1b1d22">environment and their interactions</text>
+  <line x1="512" y1="199" x2="668" y2="199" stroke="#5f636c" stroke-width="2" marker-end="url(#ah)"/>
+  <rect x="680" y="164" width="460" height="70" rx="12" fill="#eaf6f0" stroke="#16925b" stroke-opacity="0.55" stroke-width="1.5"/>
+  <text x="702" y="194" fill="#1b1d22"><tspan font-weight="700" fill="#16925b">+</tspan><tspan x="720">learns behaviours and representations</tspan></text>
+  <text x="720" y="217" fill="#1b1d22">directly from data</text>
+  <rect x="40" y="248" width="460" height="70" rx="12" fill="#fcefef" stroke="#d23c3c" stroke-opacity="0.55" stroke-width="1.5"/>
+  <text x="62" y="278" fill="#1b1d22"><tspan font-weight="700" fill="#d23c3c">−</tspan><tspan x="80">struggles to integrate vision, touch and</tspan></text>
+  <text x="80" y="301" fill="#1b1d22">proprioception in a unified way</text>
+  <line x1="512" y1="283" x2="668" y2="283" stroke="#5f636c" stroke-width="2" marker-end="url(#ah)"/>
+  <rect x="680" y="248" width="460" height="70" rx="12" fill="#eaf6f0" stroke="#16925b" stroke-opacity="0.55" stroke-width="1.5"/>
+  <text x="702" y="278" fill="#1b1d22"><tspan font-weight="700" fill="#16925b">+</tspan><tspan x="720">handles multi-modal, high-dimensional</tspan></text>
+  <text x="720" y="301" fill="#1b1d22">inputs with neural networks</text>
+  <rect x="40" y="332" width="460" height="70" rx="12" fill="#fcefef" stroke="#d23c3c" stroke-opacity="0.55" stroke-width="1.5"/>
+  <text x="62" y="362" fill="#1b1d22"><tspan font-weight="700" fill="#d23c3c">−</tspan><tspan x="80">each new task or robot embodiment needs</tspan></text>
+  <text x="80" y="385" fill="#1b1d22">re-engineering and expert knowledge</text>
+  <line x1="512" y1="367" x2="668" y2="367" stroke="#5f636c" stroke-width="2" marker-end="url(#ah)"/>
+  <rect x="680" y="332" width="460" height="70" rx="12" fill="#eaf6f0" stroke="#16925b" stroke-opacity="0.55" stroke-width="1.5"/>
+  <text x="702" y="362" fill="#1b1d22"><tspan font-weight="700" fill="#16925b">+</tspan><tspan x="720">generalizes across tasks and embodiments,</tspan></text>
+  <text x="720" y="385" fill="#1b1d22">scales with data and compute</text>
+  <line x1="40" y1="424" x2="1140" y2="424" stroke="#dddbd2" stroke-width="1.5"/>
+  <text x="590" y="460" text-anchor="middle" font-size="15" font-weight="600" fill="#5f636c">what each side still brings, and what it costs</text>
+  <rect x="40" y="476" width="460" height="120" rx="12" fill="#eef2fb" stroke="#2f6fdb" stroke-opacity="0.55" stroke-width="1.5"/>
+  <text x="62" y="508" fill="#1b1d22"><tspan font-weight="700" fill="#16925b">+</tspan><tspan x="80">mathematical rigor: precise and reliable</tspan></text>
+  <text x="80" y="531" fill="#1b1d22">where the physics is well understood</text>
+  <text x="62" y="562" fill="#1b1d22"><tspan font-weight="700" fill="#16925b">+</tspan><tspan x="80">the foundations learning builds on: FK/IK,</tspan></text>
+  <text x="80" y="585" fill="#1b1d22">Jacobians, feedback control</text>
+  <rect x="680" y="476" width="460" height="120" rx="12" fill="#eaf6f0" stroke="#16925b" stroke-opacity="0.55" stroke-width="1.5"/>
+  <text x="702" y="508" fill="#1b1d22"><tspan font-weight="700" fill="#d23c3c">−</tspan><tspan x="720">needs data (demonstrations, experience)</tspan></text>
+  <text x="720" y="531" fill="#1b1d22">and compute to learn from</text>
+  <text x="702" y="562" fill="#1b1d22"><tspan font-weight="700" fill="#d23c3c">−</tspan><tspan x="720">no guarantee of perfect generalization;</tspan></text>
+  <text x="720" y="585" fill="#1b1d22">control insights such as safety still matter</text>
+  <text x="590" y="642" text-anchor="middle" font-size="14" fill="#5f636c">The future lies in combining classical insights with learning capabilities.</text>
+</svg>

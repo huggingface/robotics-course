@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 606" width="1180" height="606" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Roboto, Helvetica, Arial, sans-serif" font-size="16">
+  <title>Three ways to generate robot motion: explicit (dynamics-based), implicit (learning-based) and hybrid, compared by inputs, knowledge, pros, cons and examples</title>
+  <rect width="1180" height="606" fill="#ffffff"/>
+  <text x="590" y="34" text-anchor="middle" font-size="18" font-weight="600" fill="#1b1d22">How does a method know how the robot and the world interact?</text>
+  <!-- explicit -->
+  <rect x="168" y="58" width="324" height="66" rx="12" fill="#eef2fb" stroke="#2f6fdb" stroke-width="2"/>
+  <text x="330" y="87" text-anchor="middle" font-size="20" font-weight="700" fill="#2f6fdb">Explicit</text>
+  <text x="330" y="111" text-anchor="middle" fill="#1b1d22">dynamics-based</text>
+  <rect x="168" y="134" width="324" height="408" rx="12" fill="#eef2fb" fill-opacity="0.55" stroke="#2f6fdb" stroke-opacity="0.45" stroke-width="1.5"/>
+  <!-- implicit -->
+  <rect x="502" y="58" width="324" height="66" rx="12" fill="#eaf6f0" stroke="#16925b" stroke-width="2"/>
+  <text x="664" y="87" text-anchor="middle" font-size="20" font-weight="700" fill="#16925b">Implicit</text>
+  <text x="664" y="111" text-anchor="middle" fill="#1b1d22">learning-based</text>
+  <rect x="502" y="134" width="324" height="408" rx="12" fill="#eaf6f0" fill-opacity="0.55" stroke="#16925b" stroke-opacity="0.45" stroke-width="1.5"/>
+  <!-- hybrid -->
+  <rect x="836" y="58" width="324" height="66" rx="12" fill="#fff4ea" stroke="#e0751f" stroke-width="2"/>
+  <text x="998" y="87" text-anchor="middle" font-size="20" font-weight="700" fill="#e0751f">Hybrid</text>
+  <text x="998" y="111" text-anchor="middle" fill="#1b1d22">physics + learning</text>
+  <rect x="836" y="134" width="324" height="408" rx="12" fill="#fff4ea" fill-opacity="0.55" stroke="#e0751f" stroke-opacity="0.45" stroke-width="1.5"/>
+  <!-- row: inputs -->
+  <text x="24" y="164" font-weight="600" fill="#5f636c">Inputs</text>
+  <text x="186" y="164" font-size="15" fill="#1b1d22">hand-crafted mathematical models</text>
+  <text x="186" y="185" font-size="15" fill="#1b1d22">of the physics (kinematics, dynamics)</text>
+  <text x="520" y="164" font-size="15" fill="#1b1d22">data: patterns are learned</text>
+  <text x="520" y="185" font-size="15" fill="#1b1d22">directly from examples</text>
+  <text x="854" y="164" font-size="15" fill="#1b1d22">physics models and data</text>
+  <!-- row: knowledge -->
+  <line x1="24" y1="203" x2="1160" y2="203" stroke="#dddbd2" stroke-width="1.5"/>
+  <text x="24" y="233" font-weight="600" fill="#5f636c">Knowledge</text>
+  <text x="186" y="233" font-size="15" fill="#1b1d22">deep domain expertise: mechanics,</text>
+  <text x="186" y="254" font-size="15" fill="#1b1d22">control theory, engineering</text>
+  <text x="520" y="233" font-size="15" fill="#1b1d22">less domain-specific engineering;</text>
+  <text x="520" y="254" font-size="15" fill="#1b1d22">behaviour is learned, not derived</text>
+  <text x="854" y="233" font-size="15" fill="#1b1d22">physics knowledge guides and</text>
+  <text x="854" y="254" font-size="15" fill="#1b1d22">constrains what is learned</text>
+  <!-- row: pros -->
+  <line x1="24" y1="272" x2="1160" y2="272" stroke="#dddbd2" stroke-width="1.5"/>
+  <text x="24" y="302" font-weight="600" fill="#5f636c">Pros</text>
+  <text x="184" y="302" font-size="15" fill="#1b1d22"><tspan font-weight="700" fill="#16925b">+</tspan><tspan x="202">works exceptionally well when the</tspan></text>
+  <text x="202" y="323" font-size="15" fill="#1b1d22">physics can be modelled precisely</text>
+  <text x="184" y="344" font-size="15" fill="#1b1d22"><tspan font-weight="700" fill="#16925b">+</tspan><tspan x="202">backbone of industrial robotics</tspan></text>
+  <text x="518" y="302" font-size="15" fill="#1b1d22"><tspan font-weight="700" fill="#16925b">+</tspan><tspan x="536">adapts to complex, uncertain</tspan></text>
+  <text x="536" y="323" font-size="15" fill="#1b1d22">environments that are hard to</text>
+  <text x="536" y="344" font-size="15" fill="#1b1d22">model analytically</text>
+  <text x="852" y="302" font-size="15" fill="#1b1d22"><tspan font-weight="700" fill="#16925b">+</tspan><tspan x="870">reliability of physics knowledge</tspan></text>
+  <text x="870" y="323" font-size="15" fill="#1b1d22">with the adaptability of learning</text>
+  <text x="852" y="344" font-size="15" fill="#1b1d22"><tspan font-weight="700" fill="#16925b">+</tspan><tspan x="870">often beats either approach alone</tspan></text>
+  <!-- row: cons -->
+  <line x1="24" y1="362" x2="1160" y2="362" stroke="#dddbd2" stroke-width="1.5"/>
+  <text x="24" y="392" font-weight="600" fill="#5f636c">Cons</text>
+  <text x="184" y="392" font-size="15" fill="#1b1d22"><tspan font-weight="700" fill="#d23c3c">−</tspan><tspan x="202">needs experts to model every new</tspan></text>
+  <text x="202" y="413" font-size="15" fill="#1b1d22">robot, task and environment</text>
+  <text x="184" y="434" font-size="15" fill="#1b1d22"><tspan font-weight="700" fill="#d23c3c">−</tspan><tspan x="202">simplified models break down on</tspan></text>
+  <text x="202" y="455" font-size="15" fill="#1b1d22">contact, friction, deformables</text>
+  <text x="518" y="392" font-size="15" fill="#1b1d22"><tspan font-weight="700" fill="#d23c3c">−</tspan><tspan x="536">needs data (and compute) to</tspan></text>
+  <text x="536" y="413" font-size="15" fill="#1b1d22">learn from</text>
+  <text x="518" y="434" font-size="15" fill="#1b1d22"><tspan font-weight="700" fill="#d23c3c">−</tspan><tspan x="536">fewer guarantees than an explicit</tspan></text>
+  <text x="536" y="455" font-size="15" fill="#1b1d22">physical model</text>
+  <text x="852" y="392" font-size="15" fill="#1b1d22"><tspan font-weight="700" fill="#d23c3c">−</tspan><tspan x="870">needs both: a usable physics</tspan></text>
+  <text x="870" y="413" font-size="15" fill="#1b1d22">model and data</text>
+  <!-- row: examples -->
+  <line x1="24" y1="473" x2="1160" y2="473" stroke="#dddbd2" stroke-width="1.5"/>
+  <text x="24" y="503" font-weight="600" fill="#5f636c">Examples</text>
+  <text x="186" y="503" font-size="15" fill="#1b1d22">PID control, Model Predictive</text>
+  <text x="186" y="524" font-size="15" fill="#1b1d22">Control, trajectory optimization</text>
+  <text x="520" y="503" font-size="15" fill="#1b1d22">neural-network policies trained with</text>
+  <text x="520" y="524" font-size="15" fill="#1b1d22">reinforcement or imitation learning</text>
+  <text x="854" y="503" font-size="15" fill="#1b1d22">learned policies kept within safety</text>
+  <text x="854" y="524" font-size="15" fill="#1b1d22">constraints from control theory</text>
+  <text x="590" y="582" text-anchor="middle" font-size="14" fill="#5f636c">Explicit methods model robot–environment interaction with equations; implicit methods learn it from data; hybrids use physics to guide the learning.</text>
+</svg>

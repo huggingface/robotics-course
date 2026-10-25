@@ -33,7 +33,7 @@ $$p(q) = \begin{pmatrix} l \cos(\theta_1) + l \cos(\theta_1 + \theta_2) \\ l \si
 
 This is called **Forward Kinematics (FK)** - mapping from joint space to task space.
 
-<!-- TODO: Small diagram: two-link arm in the plane with angles θ₁, θ₂ and link length l, showing how the two vector contributions add head-to-tail to reach p(q). -->
+<img src="https://raw.githubusercontent.com/huggingface/robotics-course/main/units/en/unit2/diagrams/two-link-fk.png" alt="A two-link planar arm at θ₁ = 30°, θ₂ = 60° with equal link lengths. The first link leaves the base at angle θ₁ from the horizontal; the second link leaves the elbow at angle θ₂ measured from the extension of the first link, so its absolute direction is θ₁ + θ₂. The two link vectors are drawn head to tail and add up to the end-effector position p(q) = (0.87, 1.50). The shaded disk is the reachable workspace." style="width: 100%; max-width: 620px;" />
 
 > [!TIP]
 > **Understanding the Math:** This equation comes from basic trigonometry! 
@@ -56,7 +56,7 @@ We need to solve: $p(q) = p^*$
 In general, this becomes an optimization problem:
 $$\min_{q \in \mathcal{Q}} \|p(q) - p^*\|_2^2$$
 
-<!-- TODO: Workspace sketch: a reachable annulus for a 2‑link arm (inner radius |l₁−l₂|, outer radius l₁+l₂), with an in‑workspace and out‑of‑workspace target p*. -->
+<img src="https://raw.githubusercontent.com/huggingface/robotics-course/main/units/en/unit2/diagrams/workspace-annulus.png" alt="The reachable workspace of a two-link arm with l₁ = 1 and l₂ = 0.5 is an annulus: outer radius l₁ + l₂ = 1.5 and inner radius |l₁ − l₂| = 0.5, drawn as two dashed circles with the ring between them shaded. A target p*₁ inside the ring is reachable, and the arm is shown in one of its two solutions with the other drawn dashed; a target p*₂ outside the outer circle is marked in red as out of reach." style="width: 100%; max-width: 620px;" />
 
 > [!WARNING]
 > **Why IK is Hard:**

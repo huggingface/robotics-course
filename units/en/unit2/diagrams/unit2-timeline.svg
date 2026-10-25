@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 392" width="1180" height="392" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Roboto, Helvetica, Arial, sans-serif" font-size="16">
+  <title>Unit 2 timeline: classical robotics, kinematics, control, limitations, motivation for learning</title>
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#5f636c"/></marker>
+  </defs>
+  <rect width="1180" height="392" fill="#ffffff"/>
+  <text x="590" y="34" text-anchor="middle" font-size="18" font-weight="600" fill="#1b1d22">Unit 2 at a glance: from classical tools to learning</text>
+  <!-- phase brackets -->
+  <path d="M28,88 L28,80 L680,80 L680,88" fill="none" stroke="#2f6fdb" stroke-width="2"/>
+  <text x="354" y="70" text-anchor="middle" font-size="15" font-weight="600" fill="#2f6fdb">classical, model-based tools</text>
+  <path d="M736,88 L736,80 L916,80 L916,88" fill="none" stroke="#d23c3c" stroke-width="2"/>
+  <text x="826" y="70" text-anchor="middle" font-size="15" font-weight="600" fill="#d23c3c">why they struggle</text>
+  <path d="M972,88 L972,80 L1152,80 L1152,88" fill="none" stroke="#16925b" stroke-width="2"/>
+  <text x="1062" y="70" text-anchor="middle" font-size="15" font-weight="600" fill="#16925b">what learning offers</text>
+  <!-- axis -->
+  <line x1="40" y1="120" x2="1150" y2="120" stroke="#5f636c" stroke-width="2" marker-end="url(#ah)"/>
+  <!-- 1. classical robotics -->
+  <circle cx="118" cy="120" r="15" fill="#2f6fdb"/>
+  <text x="118" y="126" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">1</text>
+  <line x1="118" y1="135" x2="118" y2="158" stroke="#2f6fdb" stroke-width="2"/>
+  <rect x="6" y="158" width="224" height="176" rx="12" fill="#eef2fb" stroke="#2f6fdb" stroke-width="2"/>
+  <text x="118" y="190" text-anchor="middle" font-size="17" font-weight="700" fill="#2f6fdb">Classical robotics</text>
+  <text x="118" y="214" text-anchor="middle" font-size="13" fill="#5f636c">Unit 2.1 · 2.2</text>
+  <text x="118" y="252" text-anchor="middle" font-size="15" fill="#1b1d22">explicit vs implicit models</text>
+  <text x="118" y="278" text-anchor="middle" font-size="15" fill="#1b1d22">manipulation, locomotion,</text>
+  <text x="118" y="304" text-anchor="middle" font-size="15" fill="#1b1d22">mobile manipulation</text>
+  <!-- 2. kinematics -->
+  <circle cx="354" cy="120" r="15" fill="#2f6fdb"/>
+  <text x="354" y="126" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">2</text>
+  <line x1="354" y1="135" x2="354" y2="158" stroke="#2f6fdb" stroke-width="2"/>
+  <rect x="242" y="158" width="224" height="176" rx="12" fill="#eef2fb" stroke="#2f6fdb" stroke-width="2"/>
+  <text x="354" y="190" text-anchor="middle" font-size="17" font-weight="700" fill="#2f6fdb">Kinematics</text>
+  <text x="354" y="214" text-anchor="middle" font-size="13" fill="#5f636c">Unit 2.3</text>
+  <text x="354" y="252" text-anchor="middle" font-size="15" fill="#1b1d22">SO-100 → 2-link planar arm</text>
+  <text x="354" y="278" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="15" fill="#1b1d22">FK:  q ↦ p(q)</text>
+  <text x="354" y="304" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="15" fill="#1b1d22">IK:  min ‖p(q) − p*‖²</text>
+  <!-- 3. control -->
+  <circle cx="590" cy="120" r="15" fill="#2f6fdb"/>
+  <text x="590" y="126" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">3</text>
+  <line x1="590" y1="135" x2="590" y2="158" stroke="#2f6fdb" stroke-width="2"/>
+  <rect x="478" y="158" width="224" height="176" rx="12" fill="#eef2fb" stroke="#2f6fdb" stroke-width="2"/>
+  <text x="590" y="190" text-anchor="middle" font-size="17" font-weight="700" fill="#2f6fdb">Control</text>
+  <text x="590" y="214" text-anchor="middle" font-size="13" fill="#5f636c">Unit 2.4</text>
+  <text x="590" y="252" text-anchor="middle" font-size="15" fill="#1b1d22">differential IK</text>
+  <text x="590" y="278" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="15" fill="#1b1d22">q̇ = J(q)⁺ ṗ*</text>
+  <text x="590" y="304" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="15" fill="#1b1d22">feedback: + k_p Δp</text>
+  <!-- 4. limitations -->
+  <circle cx="826" cy="120" r="15" fill="#d23c3c"/>
+  <text x="826" y="126" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">4</text>
+  <line x1="826" y1="135" x2="826" y2="158" stroke="#d23c3c" stroke-width="2"/>
+  <rect x="714" y="158" width="224" height="176" rx="12" fill="#fcefef" stroke="#d23c3c" stroke-width="2"/>
+  <text x="826" y="190" text-anchor="middle" font-size="17" font-weight="700" fill="#d23c3c">Limitations</text>
+  <text x="826" y="214" text-anchor="middle" font-size="13" fill="#5f636c">Unit 2.1 · 2.4</text>
+  <text x="826" y="252" text-anchor="middle" font-size="15" fill="#1b1d22">four limitations:</text>
+  <text x="826" y="278" text-anchor="middle" font-size="15" fill="#1b1d22">integration, scalability,</text>
+  <text x="826" y="304" text-anchor="middle" font-size="15" fill="#1b1d22">modelling, data trends</text>
+  <!-- 5. learning motivation -->
+  <circle cx="1062" cy="120" r="15" fill="#16925b"/>
+  <text x="1062" y="126" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">5</text>
+  <line x1="1062" y1="135" x2="1062" y2="158" stroke="#16925b" stroke-width="2"/>
+  <rect x="950" y="158" width="224" height="176" rx="12" fill="#eaf6f0" stroke="#16925b" stroke-width="2"/>
+  <text x="1062" y="190" text-anchor="middle" font-size="17" font-weight="700" fill="#16925b">Learning motivation</text>
+  <text x="1062" y="214" text-anchor="middle" font-size="13" fill="#5f636c">Unit 2.5</text>
+  <text x="1062" y="252" text-anchor="middle" font-size="15" fill="#1b1d22">learn from data, end to end</text>
+  <text x="1062" y="278" text-anchor="middle" font-size="15" fill="#1b1d22">generalize across tasks</text>
+  <text x="1062" y="304" text-anchor="middle" font-size="15" fill="#1b1d22">and robot embodiments</text>
+  <text x="590" y="370" text-anchor="middle" font-size="14" fill="#5f636c">Next: reinforcement learning, imitation learning and foundation models build on all five steps.</text>
+</svg>
